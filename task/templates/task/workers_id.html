@@ -1,0 +1,106 @@
+{% extends 'task/sidmain.html' %}
+
+{% load static %}
+
+{% block content %}
+
+    <br>
+
+    <span style="color:grey"><h4 class="card-title">{{worker.full_name}}</h4></span>
+    <span style="float:right; color:grey"><h4 class="card-title">{{worker.email}}</h4></span>
+
+    <div class="row">
+
+        <div class="col-md">
+            <div class="card bg-dark text-white">
+              <img width="250" height="250" class="card-img" src="{{worker.imageURL}}" alt="Card image">
+              <div class="card-img-overlay">
+              </div>
+            </div>
+        </div>
+
+        <div class="col-md">
+            <div class="card card-body" style="background-color:#5d676e; size:absolute;">
+                <h5 style="font-size:13px; text-align:center;">Total Tasks</h5>
+                <hr>
+                <h1 style="text-align: center; font-size:25px;">{{task_count}}</h1>
+            </div>
+
+        </div>
+
+        <div class="col-md">
+            <div class="card card-body" style="background-color:#5d676e;">
+                <h5 style="font-size:13px; text-align:center;">Tasks Pending</h5>
+                <hr>
+                <h1 style="text-align: center; font-size:25px;">{{pending}}</h1>
+            </div>
+        </div>
+
+        <div class="col-md">
+            <div class="card card-body" style="background-color:#5d676e;">
+                <h5 style="font-size:13px; text-align:center;">Tasks Verified</h5>
+                <hr>
+                <h1 style="text-align: center; font-size:25px;">{{verified}}</h1>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row" style="margin-top:30px;">
+
+        <div class="col-md">
+            <div class="card card-body" style="background-color:#5d676e;">
+                <h5 style="font-size:13px; text-align:center;">Earnings Total</h5>
+                <hr>
+                <h1 style="text-align: center; font-size:25px;">$</h1>
+            </div>
+        </div>
+
+        <div class="col-md">
+            <div class="card card-body" style="background-color:#5d676e;">
+                <h5 style="font-size:13px; text-align:center;">Earnings Pending</h5>
+                <hr>
+                <h1 style="text-align: center; font-size:25px;">$</h1>
+            </div>
+        </div>
+
+        <div class="col-md">
+            <div class="card card-body" style="background-color:#5d676e;">
+                <h5 style="font-size:13px; text-align:center;">Earnings Withdrawn</h5>
+                <hr>
+                <h1 style="text-align: center; font-size:25px;">$</h1>
+            </div>
+        </div>
+
+    </div>
+    <br>
+
+    <div class="row" style="margin-top:30px;">
+        <div class="col-md">
+            <div class="card card-body" style="background-color:lightgrey;">
+                <table class="table table-sm">
+                    <tr>
+                        <th>Task</th>
+                        <th>Date Performed</th>
+                        <th>Status</th>
+                        <th>Verify</th>
+                        <th>Disapprove</th>
+
+                    </tr>
+                    {% for t in task_items %}
+                        <tr>
+                            <td>{{t.task}}</td>
+                            <td>{{t.date_performed}}</td>
+                            <td>{{t.status}}</td>
+                            <td><a class="btn btn-sm btn-info" href="">Verify</a></td>
+                            <td><a class="btn btn-sm btn-danger" href="">Disapprove</a></td>
+                        </tr>
+                    {% endfor %}
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

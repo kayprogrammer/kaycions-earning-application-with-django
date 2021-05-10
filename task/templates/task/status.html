@@ -1,0 +1,48 @@
+{% load static %}
+
+<head><link rel="stylesheet" type="text/css" href="{% static '/css/status.css' %}?{% now "U" %}"></head>
+
+<br>
+
+<div class="row" style="padding-bottom:30px;">
+
+    <div class="col">
+        <div class="col-md">
+            <div class="card text-center text-white mb-3" id="total-tasks">
+                <div class="card-header">
+                    <h5 class="card-title">Total Tasks</h5>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">{{total_tasks}}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="col-md">
+            <div class="card text-center text-white mb-3" id="tasks-verified">
+                <div class="card-header">
+                    <h5 class="card-title">Tasks Verified</h5>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">{{verified}}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="col-md">
+            <div class="card text-center text-white mb-3" id="tasks-pending">
+                <div class="card-header">
+                    <h5 class="card-title">Tasks Pending</h5>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">{{pending}}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

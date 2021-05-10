@@ -1,0 +1,69 @@
+{% extends 'task/sidmain.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="contentt" style="">
+
+    {% include 'task/status.html' %}
+
+    <br>
+
+    <div class="row">
+        <div class="col-md-5">
+            <h5>WORKERS:</h5>
+            <hr>
+            <div class="card card-body" style="background-color:lightgrey;">
+                <table class="table table-sm">
+                    <tr>
+                        <th></th>
+                        <th>Worker</th>
+                        <th>Email</th>
+                    </tr>
+
+
+                    {% for worker in workers %}
+                        <tr>
+                            <td><a class="btn btn-sm btn-info" href="{% url 'worker' worker.id %}" style="font-size:11px;">View</a></td>
+                            <td style="font-size:11px;">{{worker.user}}</td>
+                            <td style="font-size:11px;">{{worker.email}}</td>
+                        </tr>
+                    {% endfor %}
+
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <h5>LAST 5 ATTEMPTED TASKS:</h5>
+            <hr>
+            <div class="card card-body" style="background-color:lightgrey;">
+                <table class="table table-sm">
+                    <tr>
+                        <th>Task</th>
+                        <th>Date Performed</th>
+                        <th>Status</th>
+                        <th>Verify</th>
+                        <th>Disapprove</th>
+
+                    </tr>
+
+                    {% for t in task_items %}
+                        <tr>
+                            <td>{{t.task}}</td>
+                            <td>{{t.date_performed}}</td>
+                            <td>{{t.status}}</td>
+                            <td><a class="btn btn-sm btn-info" href="">Verify</a></td>
+                            <td><a class="btn btn-sm btn-danger" href="">Disapprove</a></td>
+                        </tr>
+                    {% endfor %}
+
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

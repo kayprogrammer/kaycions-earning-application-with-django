@@ -1,0 +1,53 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block title %}<title>Kaycions | Welcome</title>{% endblock %}
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="Earn money from the comfort of your home">
+    <meta name="keywords" content="Earn money from the comfort of your home">
+    <meta name="author" content="Brad Traversy">
+    <style></style>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}?{% now "U" %}">
+</head>
+<body>
+    <!--Navbar-->
+    <header>
+      <div class="container">
+        <div id="branding">
+          <h1><span class="highlight">Kay</span>cions</h1>
+        </div>
+        <nav>
+            <ul class="">
+              {% block current %}
+              <li class="current"><a style="font-size:11px;" href="{% url 'home' %}">HOME</a></li>
+              <li><a style="font-size:12px;" href="{% url 'faqs' %}">FAQS</a></li>
+              <li><a style="font-size:11px;" href="{% url 'login' %}">LOG IN</a></li>
+              <li><a style="font-size:12px;" href="{% url 'register' %}">SIGN UP</a></li>
+              {% endblock %}
+            </ul>
+        </nav>
+      </div>
+    </header>
+    <!--End Navbar-->
+    {% block content %}
+
+    {% endblock %}
+    </div>
+    {% block footer %}
+    <footer>
+      <p>Kaycions, Copyright &copy; 2021</p>
+    </footer>
+    {% endblock %}
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
+
+{% load sweetify %}
+{% sweetify %}
+</body>
+</html>

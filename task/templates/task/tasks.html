@@ -1,0 +1,55 @@
+{% extends 'task/sidmain.html' %}
+{% load static %}
+{% block javascript %}
+  <script src="{% static 'js/script.js' %}"></script>
+{% endblock %}
+{% block content %}
+
+
+    <div class="row" style="margin-top:30px;">
+        <div class="col-md">
+            <div class="card card-body" style="background-color:lightgrey;">
+                <button type="button" class="btn btn-primary btn-sm btn-block js-create-task" data-url="{% url 'create_task' %}" style="font-weight:bold;">CREATE TASK</button>
+                <table class="table table-sm" id="task-table">
+                    <tr>
+                        <th>Task</th>
+                        <th>Price</th>
+                        <th>Date Created</th>
+                        <th>Link</th>
+                        <th>Task Expires</th>
+                        <th>Update</th>
+                        <th>Delete</th>
+
+                    </tr>
+
+                    {% include 'task/partial_task_list.html' %}
+
+                </table>
+                <div class="modal fade" id="modal-task">
+                    <div class="modal-dialog">
+                        <div class="modal-content"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+<!--------
+Swal.fire({
+  title: 'Are you sure?',
+  text: "You won't be able to revert this!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Yes, delete it!'
+}).then((result) => {
+  if (result.isConfirmed) {
+    Swal.fire(
+      'Deleted!',
+      'Your file has been deleted.',
+      'success'
+    )
+  }
+})--->

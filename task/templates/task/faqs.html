@@ -1,0 +1,59 @@
+{% extends 'task/main.html' %}
+
+{% load static %}
+
+{% block title %}<title>Kaycions | Faqs</title>{% endblock %}
+
+{% block current %}
+  <li ><a style="font-size:11px;" href="{% url 'home' %}">HOME</a></li>
+  <li class="current"><a style="font-size:12px;" href="{% url 'faqs' %}">FAQS</a></li>
+  <li><a style="font-size:11px;" href="{% url 'login' %}">LOG IN</a></li>
+  <li><a style="font-size:12px;" href="{% url 'register' %}">SIGN UP</a></li>
+{% endblock %}
+
+{% block content %}
+
+<section id="newsletter">
+  <div class="container">
+    <h1>Subscribe To Our Newsletter</h1>
+    <form method="post" action="">
+      {% csrf_token %}
+      {{form.email}}
+      <input type="submit" class="button_1" value="Suscribe">
+    </form>
+  </div>
+</section>
+
+
+<section id="faqs">
+  <div class="container">
+    <article id="answers">
+      <h2 class="page-title">Frequently Asked Questions</h2>
+      <ul id="Questions">
+        <li>
+          <h3>How Do I Sign Up?</h3>
+          <p>Click the button below to create an account. Make sure you fill in your details correctly to be approved for withdrawal.</p>
+            <a class="btn btn-md btn-info" href="#">Sign Up</a>
+        </li>
+        <li>
+          <h3>How Do I Participate?</h3>
+          <p>Log In and engage in different tasks on your dashboard.</p>
+        </li>
+        <li>
+          <h3>How Do I Withdraw?</h3>
+          <p>Put in your verified Paypal account in the withdrawal section so that you can cash out any time.</p>
+        </li>
+        <li>
+          <h3>What Is The Minimum Amount I Can Withdraw?</h3>
+          <p>The withdrawal limit is just $50. Once you have accumulated up to that amount or more, you can cash out anytime.</p>
+        </li>
+        <li>
+          <h3>Is This A Get-Rich-Quick Scheme?</h3>
+          <p>No it isn't. You earn as you diligently engage in activities that are posted in your dashboard everyday.</p>
+        </li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+{% endblock %}

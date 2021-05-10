@@ -1,0 +1,22 @@
+#logo{
+
+}
+
+body{
+    background-color:#ebeff5;
+}
+
+#total-tasks{
+    background-color:#5d676e;
+}
+
+#tasks-verified{
+    background-color:#5d676e;
+}
+
+#tasks-pending{
+    background-color:#5d676e;
+}
+
+@import url("https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css");
+

@@ -1,0 +1,63 @@
+{% extends 'task/sidmain.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<style>
+    .hidden{
+	display: none!important;
+    }
+</style>
+<div class="contentt">
+
+    {% include 'task/status.html' %}
+    <div class="row">
+    {% for t in tasks %}
+        <div class="col-sm-6" id="cadd">
+            <div class="card mt-2 " id="carrd" style="width: 35rem; height:16rem; padding:5px; display:inline-block; background-color:#e6e6e6;">
+                <div class="card-body p-3" style="width: 32rem; height:15rem; font-size:13px;">
+                    <div class="task-box pl-2">
+                        <p class="text-muted float-right pl-3" style="color:red !important"><span class="text-muted" style="color:blue !important">{{t.task_expiry}} {{t.task_expiry_time}} {{t.task_expiry_date}}</span></p>
+                        <h5 class="mt-0">{{t.category}}:  {{t.category_2}}</h5>
+                        <p class="text-muted mb-1" style="font-size:13px;"><br>{{t.description}}<br><br></p>
+                        <button id="butt" class="btn btn-sm btn-info" type="click"><a href="{{t.link}}" class="card-link" style="font-size:11.5px;" target="_blank">Perform Task</a></button>
+                        <div class="box-element hidden" id="status">
+                            <h5 style="color: coral; font: 1.455em serif;">Pending Approval</h5>
+                        </div>
+                        <p class="text-muted text-right mb-1">This task is worth <strong>${{t.price}}</strong></p>
+                        <div class="progress mb-3" style="height: 4px;">
+                            <div class="progress-bar bg-pink " role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <button id="ign" class="btn btn-sm btn-danger"><a href="" class="card-link ml-6" style="font-size:11.5px;">Ignore Task</a></button>
+                        <button id="igno" class="btn btn-sm btn-danger hidden" disabled><a href="" class="card-link ml-6" style="font-size:11.5px;">Ignore Task</a></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% endfor %}
+
+    </div>
+
+
+    {% block javascript %}
+        <script>
+            
+            var button = document.getElementById('butt');
+
+            button.addEventListener('click', function(e) {
+                e.preventDefault()
+            
+                document.getElementById('butt').classList.add('hidden');
+                document.getElementById('ign').classList.add('hidden');
+                document.getElementById('status').classList.remove('hidden');
+                document.getElementById('igno').classList.remove('hidden');
+                console.log('worked')
+            })
+        </script>
+    {% endblock %}
+
+</div>
+
+{% endblock %}

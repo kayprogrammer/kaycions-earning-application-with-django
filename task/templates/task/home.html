@@ -1,0 +1,90 @@
+{% extends 'task/main.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<section id="showcase">
+  <div class="container">
+    <h1 class="welcome">WELCOME</h1>
+    <h1>Earn money from the comfort of your home</h1>
+      <p>Get paid to perform simple tasks on various social media platforms and withdraw earnings directly to your paypal account.</p>
+  </div>
+</section>
+
+<section id="newsletter">
+  <div class="container">
+    <h1>Subscribe To Our Newsletter</h1>
+    <form method="post" action="">
+      {% csrf_token %}
+      {{form.email}}
+      <input type="submit" class="button_1" value="Suscribe">
+    </form>
+
+  </div>
+
+
+
+</section>
+
+<section id="boxes">
+  <div class="container">
+    <div class="box">
+      <img src="{% static '/images/twit6.png' %}" style="">
+      <h3>Twitter</h3>
+      <p>Earn cash by performing simple tasks on Twitter</p>
+    </div>
+    <div class="box">
+      <img src="{% static '/images/inst.jpg' %}" style="width:75px;">
+      <h3>Instagram</h3>
+      <p>Earn cash by performing simple tasks on Instagram</p>
+    </div>
+    <div class="box">
+      <img src="{% static '/images/yout.jpg' %}"  style="width:98px;">
+      <h3>Youtube</h3>
+      <p>Earn cash by performing simple tasks on Youtube</p>
+    </div>
+  </div>
+</section>
+
+
+
+    <section id="main">
+      <div class="container">
+        <article id="main-col">
+          <h1 class="page-title">How It Works</h1>
+          <ul id="services">
+            <li>
+              <h3>Sign Up</h3>
+              <p>Click the button below to sign up. Make sure you fill in your details correctly to be approved for withdrawal.</p>
+                <a class="btn btn-md btn-info" href="#">Sign Up</a>
+            </li>
+            <li>
+              <h3>Activity Engagement</h3>
+              <p>Log In and engage in different tasks and activities in your dashboard.</p>
+            </li>
+            <li>
+              <h3>Withdrawal</h3>
+              <p>Put in your verified Paypal account in the withdrawal section so that you can cash out any time.</p>
+            </li>
+          </ul>
+        </article>
+
+        <aside id="sidebar">
+          <div class="dark">
+            <h3>Contact us</h3>
+
+            <form class="quote" action="" method="post">
+                {% csrf_token %}
+                {{form1.as_p}}
+                <input class="button_1" type="submit">
+            </form>
+
+          </div>
+
+        </aside>
+      </div>
+    </section>
+
+{% endblock %}
+

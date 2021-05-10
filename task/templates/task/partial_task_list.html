@@ -1,0 +1,15 @@
+{% for t in tasks %}
+  <tr>
+    <td>{{t.category}} {{t.category_2}}</td>
+    <td>${{t.price|floatformat:2}}</td>
+    <td>{{t.date_created}}</td>
+    <td><a class="btn btn-sm btn-success" href="{{t.link}}">Link</td>
+    <td>{{t.task_expiry_date}} {{t.task_expiry_time}}</td>
+    <td><button type="button" class="btn btn-info btn-sm js-update-task" data-url="{% url 'update_task' t.id %}">Update</button></td>
+    <td><button type="button" class="btn btn-danger btn-sm js-delete-task" data-url="{% url 'delete_task' t.id %}"> Delete</button></td>
+  </tr>
+{% empty %}
+  <tr>
+    <td colspan="8" class="text-center">No task</td>
+  </tr>
+{% endfor %}
