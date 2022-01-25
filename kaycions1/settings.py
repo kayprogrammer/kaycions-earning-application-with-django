@@ -12,7 +12,10 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
-
+from decouple import config
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -24,9 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'qhgef*-7ix3$y33dr6x^&pp$n9=9s^wa5kvw3&vjtq_cyg2x)9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['kaycions.herokuapp.com', 'localhost']
 
 AUTH_USER_MODEL = 'task.User'
 
@@ -42,6 +45,9 @@ INSTALLED_APPS = [
     'task.apps.TaskConfig',
     'sweetify',
     'widget_tweaks',
+    'crispy_forms',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
@@ -76,6 +82,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'kaycions1.wsgi.application'
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -128,3 +135,24 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/images/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static/'),]
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+
+# Email Config
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_FROM_USER = config('EMAIL_FROM_USER')
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = EMAIL_FROM_USER
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+
+# Cloudinary config
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME' : config('cloud_name'),
+    'API_KEY' : config('api_key'),
+    'API_SECRET' : config('api_secret'),
+    'allowed_formats': ['jpeg', 'jpg', 'png', 'bmp']
+}
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
