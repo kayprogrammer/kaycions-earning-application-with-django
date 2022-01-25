@@ -114,7 +114,7 @@ def home(request):
 @unauthenticated_user
 def faqs(request):
 
-    faqs = Faqs_Terms.objects.all().exclude(terms_title__isnull=True, terms_text__isnull=True)
+    faqs = Faqs_Terms.objects.exclude(terms_title__isnull=False, terms_text__isnull=False)
 
     form = SuscribersForm()
 
