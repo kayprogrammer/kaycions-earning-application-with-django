@@ -96,7 +96,7 @@ class Worker(models.Model):
     youtube_id = models.EmailField(max_length=40, help_text='Youtube ID', null=True, unique=True)
     paypal_address = models.EmailField(max_length=100, help_text='Paypal Address', null=True, unique=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
-    code = models.CharField(max_length=60, blank=True)
+    code = models.TextField(blank=True)
     recommended_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='ref_by')
     date_created = models.DateTimeField(default=today)
     updated = models.DateTimeField(auto_now=True)
