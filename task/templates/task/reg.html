@@ -4,80 +4,49 @@
 
 {% block title %}<title>Kaycions | Register</title>{% endblock %}
 
-{% block current %}
-  <li><a style="font-size:12.5px;" href="{% url 'home' %}">HOME</a></li>
-  <li><a style="font-size:12.5px;" href="{% url 'faqs' %}">FAQS</a></li>
-  <li><a style="font-size:12.5px;" href="{% url 'login' %}">LOG IN</a></li>
-{% endblock %}
-
 {% block content %}
 
-<html>
-<head>
-    <title>Register</title>
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static '/css/reg_style.css' %}?{% now "U" %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/reg_style.css' %}?{% now "U" %}">
 
-</head>
-<body>
-
-    <div class="container h-100">
-        <div class="d-flex justify-content-center h-100">
+    <div class="container-fluid" style="display: flex; justify-content: center; align-items: center; min-height: calc(100vh - 170px); max-height: calc(100vh - 170px);">
+        <div class="d-flex justify-content-center">
             <div class="user_card">
                 <div class="d-flex justify-content-center">
-                    <h3 id="form-title">REGISTER ACCOUNT</h3>
+                    <h3 id="form-title">CREATE ACCOUNT</h3>
                 </div>
                 <div class="d-flex justify-content-center form_container">
 
-                    <form method="POST" action="">
+                    <form method="POST" action="." class="reg-form">
                         {% csrf_token %}
-                        <p style="color:#e8491d;">Full Name:</p>
-                        <div class="input-group mb-3">
+                        <div class="input-group">
                             {{form.full_name}}
                         </div>
-                        <div class="errors">{{form.errors.full_name.as_text|cut:"*"}}</div>
-                        <p style="color:#e8491d;">Username:</p>
-                        <div class="input-group mb-3">
-                            {{form.username}}
-                        </div>
-                        <div class="errors">{{form.errors.username.as_text|cut:"*"}}</div>
-                        <p style="color:#e8491d;">Email Address:</p>
-                        <div class="input-group mb-3">
+                        <div class="errors error1">{{form.full_name.errors.as_text|cut:"*"}}</div>
+                        <div class="input-group mt-3">
                             {{form.email}}
                         </div>
-                        <div class="errors">{{form.email.errors.as_text|cut:"*"}}</div>
-                        <p style="color:#e8491d;">Password:</p>
-                        <div class="input-group mb-3">
+                        <div class="errors error2">{{form.email.errors.as_text|cut:"*"}}</div>
+                        <div class="input-group mt-3">
                             {{form.password1}}
                         </div>
-                        <p style="color:#e8491d;">Password Confirmation:</p>
-                        <div class="input-group mb-3">
+                        <div class="errors error3">{{form.password1.errors.as_text|cut:"*"}}</div>
+                        <div class="input-group mt-3">
                             {{form.password2}}
                         </div>
-                        <div class="errors">{{form.errors.password2.as_text|cut:"*"}}</div>
-                        <p style="color:#e8491d;">Twitter Handle:</p>
-                        <div class="input-group mb-3">
-                            {{form.twitter_id}}
+                        <div class="errors error4">{{form.password2.errors.as_text|cut:"*"}}</div>
+                        <div class="d-flex justify-content-center links mt-3">
+                            <p style="color: #e8491d;">{{form.terms_confirmed}}
+                            I agree to the <a class="linkk" href="{% url 'terms' %}" style="color: #e8491d;">Terms & Conditiions</a></p>
                         </div>
-                        <div class="errors">{{form.twitter_id.errors.as_text|cut:"*"}}</div>
-                        <p style="color:#e8491d;">Instagram Handle:</p>
-                        <div class="input-group mb-2">
-                            {{form.instagram_id}}
-                        </div>
-                        <div class="errors">{{form.instagram_id.errors.as_text|cut:"*"}}</div>
-                        <p style="color:#e8491d;">Youtube ID:</p>
-                        <div class="input-group mb-2">
-                            {{form.youtube_id}}
-                        </div>
-                        <div class="errors">{{form.youtube_id.errors.as_text|cut:"*"}}</div>
-                        <div class="d-flex justify-content-center mt-3 login_container">
-                            <input class="btn login_btn" type="submit" value="Register Account">
+                        <div class="d-flex justify-content-center login_container">
+                            <button type="submit" class="btn login_btn" >Sign Up</button>
                         </div>
                     </form>
                 </div>
-
+                
 
                 <div class="mt-4">
+                    
                     <div class="d-flex justify-content-center links" style="color:#e8491d;"><span>Already have an account?</span>
                         <a href="{% url 'login' %}" class=" mb-1" style="color:#e8491d; position:relative; left:5px;">Log In</a>
                     </div>
@@ -86,24 +55,157 @@
         </div>
     </div>
 
-    <script type="text/javascript">
-        Swal.fire({
-            "title": "Warning",
-            "text": "{{form.error_messages}}",
-            "icon": "warning",
-        });
-    </script>
-
-</body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
-
-</html>
-
 {% endblock %}
 
-{% block footer %}
-    <footer>
-      <p class="foot">Kaycions, Copyright &copy; 2021</p>
-    </footer>
+{% block js %}
+
+<script type="text/javascript">
+
+    const fullnamefield = document.querySelector('#fullnamefield');
+    const emailfield = document.querySelector('#emailfield');
+    const passwordfield1 = document.querySelector('#passwordfield1');
+    const passwordfield2 = document.querySelector('#passwordfield2');
+
+    const errorfield = document.querySelector('.error1');
+    const errorfield2 = document.querySelector('.error2');
+    const errorfield3 = document.querySelector('.error3');
+    const errorfield4 = document.querySelector('.error4');
+    const button = document.querySelector('.login_container');
+    
+    fullnamefield.addEventListener("keyup", (e) => {
+
+        const fullnameVal = e.target.value;
+        fullnamefield.classList.remove("is-invalid");
+        errorfield.style.display = "none";
+        /*
+        if($('#emailfield').hasClass('is-invalid')){
+            $('form :submit').attr("disabled", "disabled");
+            button.innerHTML = `<button class="btn login_btn disabled" type="submit">Sign Up</button>`
+        }else if($('#passwordfield1').hasClass('is-invalid')){
+            $('form :submit').attr("disabled", "disabled");
+            button.innerHTML = `<button class="btn login_btn disabled" type="submit">Sign Up</button>`
+        }else if($('#passwordfield2').hasClass('is-invalid')){
+            $('form :submit').attr("disabled", "disabled");
+            button.innerHTML = `<button class="btn login_btn disabled" type="submit">Sign Up</button>`
+        } 
+        */
+
+        if (fullnameVal.length > 0){
+
+            fetch('/validate-fullname', {
+                body:JSON.stringify({full_name:fullnameVal}),
+                method: "POST",
+            }).then(res=>res.json()).then(data=>{
+                if(data.full_name_error){
+                    fullnamefield.classList.add("is-invalid");
+                    errorfield.style.display = "block";
+                    errorfield.innerHTML = `${data.full_name_error}`
+                    
+                }
+            })
+        }
+        
+    })
+
+    emailfield.addEventListener("keyup", (e) => {
+
+        const emailVal = e.target.value;
+        
+        emailfield.classList.remove("is-invalid");
+        errorfield2.style.display = "none";
+        /*
+        if($('#fullnamefield').hasClass('is-invalid')){
+            $('form :submit').attr("disabled", "disabled");
+            button.innerHTML = `<button class="btn login_btn disabled" type="submit">Sign Up</button>`
+        }else if($('#passwordfield1').hasClass('is-invalid')){
+            $('form :submit').attr("disabled", "disabled");
+            button.innerHTML = `<button class="btn login_btn disabled" type="submit">Sign Up</button>`
+        }else if($('#passwordfield2').hasClass('is-invalid')){
+            $('form :submit').attr("disabled", "disabled");
+            button.innerHTML = `<button class="btn login_btn disabled" type="submit">Sign Up</button>`
+        }
+        */
+        if (emailVal.length > 0){
+
+            fetch('/validate-email', {
+                body:JSON.stringify({email:emailVal}),
+                method: "POST",
+            }).then(res=>res.json()).then(data=>{
+                if(data.email_error){
+                    emailfield.classList.add("is-invalid");
+                    errorfield2.style.display = "block";
+                    errorfield2.innerHTML = `${data.email_error}`
+                }
+            })
+        }
+        
+    })
+
+    passwordfield1.addEventListener("keyup", (e) => {
+
+        const passwordVal = e.target.value;
+        
+        passwordfield1.classList.remove("is-invalid");
+        errorfield3.style.display = "none";
+        /*
+        if($('#emailfield').hasClass('is-invalid')){
+            $('form :submit').attr("disabled", "disabled");
+            button.innerHTML = `<button class="btn login_btn disabled" type="submit">Sign Up</button>`
+        }else if($('#fullnamefield').hasClass('is-invalid')){
+            $('form :submit').attr("disabled", "disabled");
+            button.innerHTML = `<button class="btn login_btn disabled" type="submit">Sign Up</button>`
+        }else if($('#passwordfield2').hasClass('is-invalid')){
+            $('form :submit').attr("disabled", "disabled");
+            button.innerHTML = `<button class="btn login_btn disabled" type="submit">Sign Up</button>`
+        }
+        */
+        if (passwordVal.length > 0){
+
+            fetch('/validate-password', {
+                body:JSON.stringify({password1:passwordVal}),
+                method: "POST",
+            }).then(res=>res.json()).then(data=>{
+                if(data.password_error){
+                    passwordfield1.classList.add("is-invalid");
+                    errorfield3.style.display = "block";
+                    errorfield3.innerHTML = `${data.password_error}`
+                }
+
+            })
+        }
+        
+    })
+    
+    passwordfield2.addEventListener("keyup", (e) => {
+
+        const passwordVal2 = e.target.value;
+        const passwordVal1 = document.querySelector('#passwordfield1').value;
+        passwordfield2.classList.remove("is-invalid");
+        errorfield4.style.display = "none";
+        /*
+        if($('#emailfield').hasClass('is-invalid')){
+            $('form :submit').attr("disabled", "disabled");
+            button.innerHTML = `<button class="btn login_btn disabled" type="submit">Sign Up</button>`
+        }else if($('#fullnamefield').hasClass('is-invalid')){
+            $('form :submit').attr("disabled", "disabled");
+            button.innerHTML = `<button class="btn login_btn disabled" type="submit">Sign Up</button>`
+        }else if($('#passwordfield1').hasClass('is-invalid')){
+            $('form :submit').attr("disabled", "disabled");
+            button.innerHTML = `<button class="btn login_btn disabled" type="submit">Sign Up</button>`
+        }
+        */
+        if (passwordVal2.length > 0){
+
+            if(passwordVal2 != passwordVal1){
+                passwordfield2.classList.add("is-invalid");
+                errorfield4.style.display = "block";
+                errorfield4.innerHTML = `Password Mismatch`
+            }
+
+        }
+
+    })
+    
+</script>
 
 {% endblock %}

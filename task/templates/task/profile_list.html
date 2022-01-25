@@ -1,0 +1,47 @@
+<div class="col lala d-flex table-responsive">
+    <img onclick="window.location='{{worker.imageURL}}'" style="cursor: pointer;" class="worker-img mr-2 prop" src="{{worker.imageURL}}" alt="ava">
+    <table class=" table table-sm table-worker prop" style=" background-color:lightgrey;">
+        <tbody style="font-size: 12px;">
+            <tr>
+                <th scope="row" style="border-right: #dcdcdc solid 1px;">Full Name</th>
+                <td>{{worker.full_name|default:"Bla Doe"|capfirst}}</td>
+            </tr>
+
+            <tr>
+                <th scope="row" style="border-right: #dcdcdc solid 1px;">Email Address</th>
+                <td>{{worker.email |default:"bladoe@gmai"}}</td>
+            </tr>
+
+            <tr>
+                <th scope="row" style="border-right: #dcdcdc solid 1px;">Facebook ID</th>
+                <td>{{worker.facebook_id |default:"--------"}}</td>
+            </tr>
+
+            <tr>
+                <th scope="row" style="border-right: #dcdcdc solid 1px;">Twitter ID</th>
+                <td>{{worker.twitter_id |default:"--------"}}</td>
+            </tr>
+
+            <tr>
+                <th scope="row" style="border-right: #dcdcdc solid 1px;">Instagram ID</th>
+                <td>{{worker.instagram_id |default:"--------"}}</td>
+            </tr>
+
+            <tr>
+                <th scope="row" style="border-right: #dcdcdc solid 1px;">Youtube ID</th>
+                <td>{{worker.youtube_id |default:"--------"}}</td>
+            </tr>
+
+            <tr>
+                <th scope="row" style="border-right: #dcdcdc solid 1px;">Paypal Address</th>
+                <td>{{worker.paypal_address |default:"--------"}}</td>
+            </tr>
+            <tr>
+                <th scope="row" style="border-right: #dcdcdc solid 1px;">Referral Link</th>
+                <td><a style="color: blue;" href="{% url 'register-ref' worker.code %}">https://{{domain}}{% url 'register-ref' worker.code %}</a></td>
+            </tr>
+
+        </tbody>
+    </table>
+
+</div>

@@ -11,41 +11,57 @@
     <meta name="author" content="Brad Traversy">
     <style></style>
 
-
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css">
     <link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}?{% now "U" %}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css">
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}">
+
 </head>
 <body>
     <!--Navbar-->
-    <header>
-      <div class="container">
-        <div id="branding">
-          <h1><span class="highlight">Kay</span>cions</h1>
-        </div>
-        <nav>
-            <ul class="">
-              {% block current %}
-              <li class="current"><a style="font-size:11px;" href="{% url 'home' %}">HOME</a></li>
-              <li><a style="font-size:12px;" href="{% url 'faqs' %}">FAQS</a></li>
-              <li><a style="font-size:11px;" href="{% url 'login' %}">LOG IN</a></li>
-              <li><a style="font-size:12px;" href="{% url 'register' %}">SIGN UP</a></li>
-              {% endblock %}
-            </ul>
-        </nav>
+    <nav style="border-bottom: #e8491d 2px solid; padding-top: 15px; padding-bottom: 15px; padding-left: 15px; padding-right: 15px; background-color:#212529;" class="navbar navbar-expand-lg navbar-light">
+      <span class="navbar-brand" href="#" style="font-size: 30px; font-weight: bold; color: white;"><span style="color:#e8491d;">Kay</span>cions</span>
+      <button class="navbar-toggler" style="border: #35424a 2px solid;" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <i style="color: white; font-size: 23px;" class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav" >
+        <ul class="navbar-nav" style="margin-left: auto; order: 2; font-weight: bold;">
+          {% url 'home' as home_url %}
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == home_url %}active{% endif %}" href="{% url 'home' %}">Home</a>
+          </li>
+          {% url 'faqs' as faqs_url %}
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == faqs_url %}active{% endif %}" href="{% url 'faqs' %}">Faqs</a>
+          </li>
+          {% url 'login' as login_url %}
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == login_url %}active{% endif %}" href="{% url 'login' %}">Login</a>
+          </li>
+          {% url 'register' as register_url %}
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == register_url %}active{% endif %}" href="{% url 'register' %}">Sign Up</a>
+          </li>
+        </ul>
       </div>
-    </header>
+    </nav>
     <!--End Navbar-->
     {% block content %}
 
     {% endblock %}
     </div>
-    {% block footer %}
-    <footer>
-      <p>Kaycions, Copyright &copy; 2021</p>
+    <footer class="mt-1" style="background-color: #212529;">
+      <p>Kaycions | Copyright &copy; <script>document.write(new Date().getFullYear());</script></p>
     </footer>
-    {% endblock %}
 
+    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'js/popper.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
+
+    {% block js %}
+    {% endblock %}
 
 {% load sweetify %}
 {% sweetify %}

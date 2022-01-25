@@ -1,45 +1,55 @@
 {% load static %}
 
-<head><link rel="stylesheet" type="text/css" href="{% static '/css/status.css' %}?{% now "U" %}"></head>
-
 <br>
-
-<div class="row" style="padding-bottom:30px;">
-
-    <div class="col">
-        <div class="col-md">
-            <div class="card text-center text-white mb-3" id="total-tasks">
+<div class=" table-responsive">
+    <div class="text-center tasks-status" style="display: flex; width: 10em;">
+        <div class="col-xs-4">
+            <div class="card text-center text-white mb-3 mr-1" style="background-color:#5d676e; width: 20em;">
                 <div class="card-header">
-                    <h5 class="card-title">Total Tasks</h5>
+                    <h5 class="card-title" style="color: white; font-size: 18px;">Total Tasks</h5>
                 </div>
                 <div class="card-body">
-                    <h3 class="card-title">{{total_tasks}}</h3>
+                    <h3 class="card-title" style="color: white; font-size: 18px;">{{total_tasks}}</h3>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="col">
-        <div class="col-md">
-            <div class="card text-center text-white mb-3" id="tasks-verified">
+        <div class="col-xs-4">
+            <div class="card text-center text-white mb-3 mr-1" id="tasks-pending" style="background-color:#5d676e; width: 20em;">
                 <div class="card-header">
-                    <h5 class="card-title">Tasks Verified</h5>
+                    <h5 class="card-title" style="color: white; font-size: 18px;">Tasks Unattempted</h5>
                 </div>
                 <div class="card-body">
-                    <h3 class="card-title">{{verified}}</h3>
+                    <h3 class="card-title" style="color: white; font-size: 18px;">{{unattempted_tasks.count}}</h3>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="col">
-        <div class="col-md">
-            <div class="card text-center text-white mb-3" id="tasks-pending">
+        <div class="col-xs-4">
+            <div class="card text-center text-white mb-3 mr-1" id="tasks-pending" style="background-color:#5d676e; width: 20em;">
                 <div class="card-header">
-                    <h5 class="card-title">Tasks Pending</h5>
+                    <h5 class="card-title" style="color: white; font-size: 18px;">Tasks Pending</h5>
                 </div>
                 <div class="card-body">
-                    <h3 class="card-title">{{pending}}</h3>
+                    <h3 class="card-title" style="color: white; font-size: 18px;">{{pending_tasks.count}}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <div class="card text-center text-white mb-3 mr-1" id="tasks-verified" style="background-color:#5d676e; width: 20em;">
+                <div class="card-header">
+                    <h5 class="card-title" style="color: white; font-size: 18px;">Tasks Verified</h5>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title" style="color: white; font-size: 18px;">{{verified_tasks.count}}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <div class="card text-center text-white mb-3 mr-1" id="tasks-pending" style="background-color:#5d676e; width: 20em;">
+                <div class="card-header">
+                    <h5 class="card-title" style="color: white; font-size: 18px;">Tasks Disapproved</h5>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title" style="color: white; font-size: 18px;">{{disapproved_tasks.count}}</h3>
                 </div>
             </div>
         </div>

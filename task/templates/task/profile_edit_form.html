@@ -1,0 +1,82 @@
+{% load widget_tweaks %}
+{% load static %}
+    <!-- Main CSS-->
+    <link href="{% static 'css/form.css' %}?{% now "U" %}" rel="stylesheet" media="all">
+
+
+    <div class="card-body">
+        
+        <div class="form-row">
+            <div class="name">Full name</div>
+            <div class="value">
+                {% render_field form.full_name class+="input--style-6" placeholder="Enter your full name..." %}
+                {{form.full_name.errors}}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="name">Facebook ID</div>
+            <div class="value">
+                {% render_field form.facebook_id class+="input--style-6" placeholder="Copy your facebook profile url..." %}
+                {{form.facebook_id.errors}}
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="name">Twitter ID</div>
+            <div class="value">
+                {% render_field form.twitter_id class+="input--style-6" placeholder="e.g @twiiterusername..." %}
+                {{form.twitter_id.errors}}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="name">Instagram ID</div>
+            <div class="value">
+                <div class="input-group">
+                    {% render_field form.instagram_id class+="input--style-6" placeholder="e.g @instagramusername..." %}
+                    {{form.instagram_id.errors}}
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="name">Youtube ID</div>
+            <div class="value">
+                {% render_field form.youtube_id class+="input--style-6" placeholder="e.g johndoe@gmail.com..." %}
+                {{form.youtube_id.errors}}
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="name">Paypal Address</div>
+            <div class="value">
+                {% render_field form.paypal_address class+="input--style-6" placeholder="e.g johndoe@gmail.com..." %}
+                {{form.paypal_address.errors}}
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="name">Select Image</div>
+            <div class="value">
+                <div class="input-group js-input-file">
+                    {{form.avatar}}
+                    {{form.avatar.errors}}
+
+                    <label class="label--file" for="file">Choose</label>
+                    <span class="input-file__info">No image chosen</span>
+                </div>
+                <div id="img-box"></div>
+                <div class="label--desc">Upload a profile picture. 3mb max-width</div>
+            </div>
+            
+        </div>
+        <div class="row spinner hidden" style="float: right;">
+            <div class="spinner-border mt-1" style="float: right;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var url = "{% static 'js/form.js' %}"
+        $.getScript(url);
+       
+    </script>

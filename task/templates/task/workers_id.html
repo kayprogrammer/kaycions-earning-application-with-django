@@ -2,84 +2,71 @@
 
 {% load static %}
 
+{% block title %}Kaycions | Worker's Profile{% endblock %}
+
 {% block content %}
 
     <br>
 
-    <span style="color:grey"><h4 class="card-title">{{worker.full_name}}</h4></span>
-    <span style="float:right; color:grey"><h4 class="card-title">{{worker.email}}</h4></span>
+    <div class="row" style="padding-right: 17px; margin-bottom: 10px;">
+        <div class="col lala d-flex table-responsive">
+            <img onclick="window.location='{{worker.imageURL}}'" class="worker-img mr-2 prop" style="cursor: pointer;" src="{{worker.imageURL}}" alt="ava">
+            <table class="table table-sm table-worker prop" style=" background-color:lightgrey;">
+                <tbody style="font-size: 12px;">
+                    <tr>
+                        <th scope="row" style="border-right: #dcdcdc solid 1px;">Full Name</th>
+                        <td>{{worker.full_name|default:"--------"|capfirst}}</td>
+                    </tr>
 
-    <div class="row">
+                    <tr>
+                        <th scope="row" style="border-right: #dcdcdc solid 1px;">Email Address</th>
+                        <td>{{worker.email|default:"--------"}}</td>
+                    </tr>
 
-        <div class="col-md">
-            <div class="card bg-dark text-white">
-              <img width="250" height="250" class="card-img" src="{{worker.imageURL}}" alt="Card image">
-              <div class="card-img-overlay">
-              </div>
-            </div>
+                    <tr>
+                        <th scope="row" style="border-right: #dcdcdc solid 1px;">Facebook ID</th>
+                        <td>{{worker.facebook_id|default:"--------"}}</td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row" style="border-right: #dcdcdc solid 1px;">Twitter ID</th>
+                        <td>{{worker.twitter_id|default:"--------"}}</td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row" style="border-right: #dcdcdc solid 1px;">Instagram ID</th>
+                        <td>{{worker.instagram_id|default:"--------"}}</td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row" style="border-right: #dcdcdc solid 1px;">Youtube ID</th>
+                        <td>{{worker.youtube_id|default:"--------"}}</td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row" style="border-right: #dcdcdc solid 1px;">Paypal Address</th>
+                        <td>{{worker.paypal_address|default:"--------"}}</td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row" style="border-right: #dcdcdc solid 1px;">Referral Link</th>
+                        <td><a style="color: blue;" href="{% url 'register-ref' worker.code %}">https://{{domain}}{% url 'register-ref' worker.code %}</a></td>
+                    </tr>
+
+                </tbody>
+            </table>
+
         </div>
-
-        <div class="col-md">
-            <div class="card card-body" style="background-color:#5d676e; size:absolute;">
-                <h5 style="font-size:13px; text-align:center;">Total Tasks</h5>
-                <hr>
-                <h1 style="text-align: center; font-size:25px;">{{task_count}}</h1>
-            </div>
-
-        </div>
-
-        <div class="col-md">
-            <div class="card card-body" style="background-color:#5d676e;">
-                <h5 style="font-size:13px; text-align:center;">Tasks Pending</h5>
-                <hr>
-                <h1 style="text-align: center; font-size:25px;">{{pending}}</h1>
-            </div>
-        </div>
-
-        <div class="col-md">
-            <div class="card card-body" style="background-color:#5d676e;">
-                <h5 style="font-size:13px; text-align:center;">Tasks Verified</h5>
-                <hr>
-                <h1 style="text-align: center; font-size:25px;">{{verified}}</h1>
-            </div>
-
-        </div>
-
     </div>
-
-    <div class="row" style="margin-top:30px;">
-
-        <div class="col-md">
-            <div class="card card-body" style="background-color:#5d676e;">
-                <h5 style="font-size:13px; text-align:center;">Earnings Total</h5>
-                <hr>
-                <h1 style="text-align: center; font-size:25px;">$</h1>
-            </div>
-        </div>
-
-        <div class="col-md">
-            <div class="card card-body" style="background-color:#5d676e;">
-                <h5 style="font-size:13px; text-align:center;">Earnings Pending</h5>
-                <hr>
-                <h1 style="text-align: center; font-size:25px;">$</h1>
-            </div>
-        </div>
-
-        <div class="col-md">
-            <div class="card card-body" style="background-color:#5d676e;">
-                <h5 style="font-size:13px; text-align:center;">Earnings Withdrawn</h5>
-                <hr>
-                <h1 style="text-align: center; font-size:25px;">$</h1>
-            </div>
-        </div>
-
-    </div>
+    
+    {% include 'task/status.html' %}
+    {% include 'task/earnings.html' %}
     <br>
 
     <div class="row" style="margin-top:30px;">
         <div class="col-md">
-            <div class="card card-body" style="background-color:lightgrey;">
-                <table class="table table-sm">
+            <div class="card card-body table-responsive" style="background-color:lightgrey;">
+                <table class="table table-sm ">
                     <tr>
                         <th>Task</th>
                         <th>Date Performed</th>

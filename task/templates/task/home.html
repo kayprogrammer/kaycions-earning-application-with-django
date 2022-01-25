@@ -8,47 +8,56 @@
   <div class="container">
     <h1 class="welcome">WELCOME</h1>
     <h1>Earn money from the comfort of your home</h1>
-      <p>Get paid to perform simple tasks on various social media platforms and withdraw earnings directly to your paypal account.</p>
+      <p>Here at Kaycions, Get paid to perform simple tasks on various social media platforms and withdraw earnings directly to your paypal account.</p>
   </div>
 </section>
 
-<section id="newsletter">
-  <div class="container">
-    <h1>Subscribe To Our Newsletter</h1>
-    <form method="post" action="">
-      {% csrf_token %}
-      {{form.email}}
-      <input type="submit" class="button_1" value="Suscribe">
-    </form>
+<nav class="navbar navbar-light justify-content-between" style="padding: 25px; background-color: #212529;">
+  <span style="color: white;" class="navbar-brand">Suscribe To Our Newsletter</span>
+  <form method="post" class="form-inline d-flex">
+    {% csrf_token %}
+    {{form.email}}
+    <button style="margin-left: 15px;" class="btn btn-outline-success my-2 my-sm-0" type="submit">Suscribe</button>
+  </form>
+</nav>
 
+<div class="container-fluid mt-3 mb-3 contt">
+  <h2 style="font-weight: bold;">How It Works</h2>
+  <div class="row ">
+    <div class="col">
+      <div class="card " style=" max-width: 700px; background-color: #dcdcdc;">
+        <div class="card-body" style="border-left: #a9a9a9 2px solid; border-right: #a9a9a9 2px solid; border-top: #a9a9a9 2px solid; border-bottom: #a9a9a9 2px solid;">
+          <h5 class="card-title " style="font-weight: bold;">Sign Up</h5>
+          <p class="card-text">Click the button below to sign up. Make sure you fill in your details correctly to be approved for withdrawal.</p>
+          <a href="{% url 'register' %}" class="btn btn-primary">Sign Up</a>
+        </div>
+        <div class="card-body" style="border-left: #a9a9a9 2px solid; border-right: #a9a9a9 2px solid; border-bottom: #a9a9a9 2px solid;">
+          <h5 class="card-title" style="font-weight: bold;">Activity Engagement</h5>
+          <p class="card-text">Log In and engage in different tasks and activities in your dashboard.</p>
+          <a href="#" class="btn btn-primary">Terms & Conditions</a>
+        </div>
+        <div class="card-body" style="border-left: #a9a9a9 2px solid; border-right: #a9a9a9 2px solid; border-bottom: #a9a9a9 2px solid;">
+          <h5 class="card-title" style="font-weight: bold;">Withdrawal</h5>
+          <p class="card-text">Put in your verified Paypal account while editing your profile so that you can cash out after meeting the earnings requirement..</p>
+          <a href="#" class="btn btn-primary">Inactive Button</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="card" style="background-color: #212529;">
+        <div class="card-body">
+          <h5 class="card-title" style="color: white; font-size: 20px;">Send us a message</h1>
+          <form method="post">
+              {% csrf_token %}
+              {{form1.as_p}}
+              <button type="submit" class="btn btn-primary btn-md">Send</button>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
-
-
-
-</section>
-
-<section id="boxes">
-  <div class="container">
-    <div class="box">
-      <img src="{% static '/images/twit6.png' %}" style="">
-      <h3>Twitter</h3>
-      <p>Earn cash by performing simple tasks on Twitter</p>
-    </div>
-    <div class="box">
-      <img src="{% static '/images/inst.jpg' %}" style="width:75px;">
-      <h3>Instagram</h3>
-      <p>Earn cash by performing simple tasks on Instagram</p>
-    </div>
-    <div class="box">
-      <img src="{% static '/images/yout.jpg' %}"  style="width:98px;">
-      <h3>Youtube</h3>
-      <p>Earn cash by performing simple tasks on Youtube</p>
-    </div>
-  </div>
-</section>
-
-
-
+</div>
+<!--
     <section id="main">
       <div class="container">
         <article id="main-col">
@@ -65,7 +74,7 @@
             </li>
             <li>
               <h3>Withdrawal</h3>
-              <p>Put in your verified Paypal account in the withdrawal section so that you can cash out any time.</p>
+              <p>Put in your verified Paypal account while editing your profile so that you can cash out after meeting the specified earnings.</p>
             </li>
           </ul>
         </article>
@@ -85,6 +94,6 @@
         </aside>
       </div>
     </section>
-
+-->
 {% endblock %}
 

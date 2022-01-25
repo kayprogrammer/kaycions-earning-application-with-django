@@ -4,21 +4,11 @@
 
 {% block title %}<title>Kaycions | Login</title>{% endblock %}
 
-{% block current %}
-  <li><a style="font-size:13px;" href="{% url 'home' %}">HOME</a></li>
-  <li><a style="font-size:13px;" href="{% url 'faqs' %}">FAQS</a></li>
-  <li><a style="font-size:13px;" href="{% url 'register' %}">SIGN UP</a></li>
-{% endblock %}
-
 {% block content %}
 
-<head>
-	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-	<link rel="stylesheet" type="text/css" href="{% static '/css/login_style.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static '/css/login_style.css' %}?{% now "U" %}">
 
-</head>
-<body>
-	<div class="container h-100">
+	<div class="container-fluid" style="display: flex; justify-content: center; align-items: center; min-height: calc(100vh - 165px); max-height: calc(100vh - 165px);">
 		<div class="d-flex justify-content-center h-100">
 			<div class="user_card">
 				<div class="d-flex justify-content-center">
@@ -30,7 +20,7 @@
 					<form method="POST" action="">
 					    {% csrf_token %}
 						<div class="input-group mb-3">
-							<input type="text" name="username" placeholder="Username..." class="form-control">
+							<input type="email" name="email" placeholder="Email address..." class="form-control">
 						</div>
 						<div class="input-group mb-2">
                             <input type="password" name="password" placeholder="Password..." class="form-control" >
@@ -48,23 +38,16 @@
                         <a href="{% url 'register' %}" class=" mb-1" style="color:#e8491d; position:relative; left:5px;"> Sign Up</a>
                     </div>
 					<div class="d-flex justify-content-center links" style="color:#e8491d;">
-						Forgot password? <a href="" class="ml-2" style="color:#e8491d; position:relative; left:5px;">Reset password</a>
+						Forgot password? <a href="{% url 'reset_password' %}" class="ml-2" style="color:#e8491d; position:relative; left:5px;">Reset password</a>
 					</div>
 
 				</div>
 			</div>
 		</div>
 	</div>
-</body>
+
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-{% endblock %}
-
-{% block footer %}
-    <footer>
-      <p class="foot">Kaycions, Copyright &copy; 2021</p>
-    </footer>
 
 {% endblock %}

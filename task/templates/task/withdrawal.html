@@ -1,0 +1,59 @@
+{% extends 'task/sidmain.html' %}
+
+{% load static %}
+
+{% block title %}Kaycions | Earnings & Withdrawal{% endblock %}
+
+{% block content %}
+
+{% include 'task/earnings.html' %}
+
+<div class="row">
+    <div class="card" style="background-color: #f8f9fa;">
+        <div class="card-body bs-callout">
+            <div class="bs-callout bs-callout-danger">
+                <h4>Please Note:</h4>
+                <p>1. Whenever you perform any task by just a click of the "Perform task" button, the price of the task will be added to your pending earnings, which will later be transfered to your verified earnings if your task performance is confirmed. </p>
+                <p>2. If you ever undo any task (e.g deleting comments or later unliking after earnings has been increased etc), we will check and deduct your earnings and add it to your disapproved earnings. And if it goes on, your account will be deactivated.</p>
+                <p>3. You can only submit withdrawal request when your verified earnings is up to $50, which will be sent to your paypal account as specified in your profile.</p>
+            </div>
+
+            <div class="bs-callout bs-callout-danger">
+                <h4>Withdrawal request:</h4>
+                {% if user.worker.paypal_address == None %}
+                    <p>Please go to your profile and input your paypal address</p>
+                {% else %}
+                    <p>Paypal address: {{user.worker.paypal_address}}</p>
+                {% endif %}
+
+                {% if verified_earnings > 49.99 %}
+                    {% if user.worker.paypal_address != None %}
+                        <p>Click the button below to submit withdrawal request</p>
+                        <form method="POST">
+                            {% csrf_token %}
+                            {{form}}
+                            <button type="submit" class="btn btn-primary btn-sm">Withdraw Earnings</button>
+                        </form>
+                    {% else %}
+                        <button type="submit" class="btn btn-primary btn-sm" disabled>Withdraw Earnings</button>
+                    {% endif %}
+                {% else %}
+                    <p>Sorry, your verified earnings is not up to $50 yet. Perform more tasks</p>
+                    <button type="submit" class="btn btn-primary btn-sm" disabled>Withdraw Earnings</button>
+                {% endif %}
+            </div>
+
+            <div class="bs-callout bs-callout-danger">
+                <h4>Earnings Complaint:</h4>
+                <p>Send as <strong>{{request.user.worker|capfirst}}...</strong></p>
+                <form method="POST" action="." class="mb-5 ml-auto mr-0 ">
+                    {% csrf_token %}                 
+                    {{form2.text}}
+                    <button type="submit" class="btn btn-success btn-sm mt-2">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>    
+</div>
+
+{% endblock %}

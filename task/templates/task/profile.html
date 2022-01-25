@@ -1,0 +1,25 @@
+{% extends 'task/sidmain.html' %}
+
+{% load static %}
+
+{% block title %}Kaycions | My Profile{% endblock %}
+
+{% block content %}
+
+<button class="btn btn-secondary btn-sm js-edit-profile" id="edit-btn" type="button" data-url="{% url 'edit_profile' %}">Edit Profile</button>
+
+<div class="row" style="padding-right: 17px; margin-bottom: 10px;" id="profile-list">
+    {% include 'task/profile_list.html' %}
+</div>
+
+{% include 'task/status.html' %}
+
+{% include 'task/earnings.html' %}
+
+<div class="modal fade" id="modal-profile">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content"></div>
+    </div>
+</div>
+
+{% endblock %}

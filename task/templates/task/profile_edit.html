@@ -1,0 +1,17 @@
+<form method="post" action="{% url 'edit_profile' %}" class="js-profile-edit-form" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="modal-header" style="background-color: #212529;">
+    <button type="button" class="close" style="background-color: transparent; border: none;" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true" style="color: red;">&times;</span>
+    </button>
+    <h4 class="modal-title" style="color: white;">Edit your profile</h4>
+  </div>
+  <div class="modal-body">
+    {% include 'task/profile_edit_form.html' %}
+  </div>
+  <div class="modal-footer" style="background-color: #212529;">
+    <button type="button" class="btn btn-default" data-dismiss="modal" style="font-weight: bold; color: red;">Close</button>
+    <button type="submit" class="btn btn-primary">Save</button>
+  </div>
+</form>
+

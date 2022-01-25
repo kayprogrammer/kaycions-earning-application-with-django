@@ -1,131 +1,326 @@
 {% load static %}
+{% load custom_tags %}
 
-<!DOCTYPE html>
-<html>
-<head>
+<!doctype html>
+<html lang="en">
+  <head>
+  	<title>{% block title %}Kaycions | Dashboard{% endblock %}</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    {% block title %}<title>Kaycions | Dashboard</title>{% endblock %}
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+		
+		<link rel="stylesheet" href="{% static 'css/side_style.css' %}?{% now "U" %}">
+
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css">
-
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <!-- Our Custom CSS -->
-    <link rel="stylesheet" href="{% static 'css/side_style.css' %}?{% now "U" %}">
-
-    <!-- Font Awesome JS -->
-    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
-
-</head>
-
-<body>
-    <div class="wrapper">
-        <!-- Sidebar  -->
-        <nav id="sidebar">
-
-            <div class="sidebar-header">
-                <div>
-                    <h3><span class="hello-msg">{{request.user}}</span></h3>
-                    <strong>{{request.user|make_list|first}}</strong>
-                </div>
-                <h3>Dashboard</h3>
-                <strong>DB</strong>
-            </div>
-
-            <ul class="list-unstyled components">
-
-                <li class="active">
-                    <a href="{% url 'dashboard' %}" data-toggle="collapse" aria-expanded="false">
-                        <i class="fas fa-home"></i>
-                        Dashboard
-                    </a>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css">
+  </head>
+  <body>
+		
+		<div class="wrapper d-flex align-items-stretch">
+			<nav id="sidebar">
+				<div class="p-4 pt-5 ">
+		  		<a onclick="window.location='{{user.worker.imageURL}}'" class="img logo rounded-circle mb-5" style="cursor: pointer; background-image: url({{user.worker.imageURL}}); background-position: top;"></a>
+          <h5 class="dispname" style="text-align: center; color: white;">{{user.worker.full_name|capfirst}}</h5>
+	        <ul class="list-unstyled components mb-5">
+              {% url 'dashboard' as dashboard_url %}
+	          <li {% if request.path == dashboard_url %}class="active"{% endif %}>
+	            <a href="{% url 'dashboard' %}" >Dashboard</a>
+	          </li>
+	          {% url 'profile' as profile_url %}
+            <li {% if request.path == profile_url %}class="active"{% endif %}>
+	              <a href="{% url 'profile' %}">Profile</a>
+	          </li>
+	          <li>
+              <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">{% if user.is_staff %}Tasks{% else %}My Tasks{% endif %}</a>
+              <ul class="collapse list-unstyled" id="pageSubmenu">
+                {% if user.is_staff %}
+                {% url 'tasks' as tasks_url %}
+                <li {% if request.path == tasks_url %}class="active"{% endif %}>
+                    <a href="{% url 'tasks' %}">All Tasks</a>
                 </li>
-                <li>
-                    <a href="#">
-                        <i class="fas fa-user"></i>
-                        Profile
-                    </a>
-                    {% if request.user.is_staff %}
-                    <a href="{% url 'tasks' %}">
-                        <i class="fas fa-tasks"></i>
-                        Tasks
-                    </a>
-                    <a href="#">
-                        <i class="fas fa-users"></i>
-                        Users
-                    </a>
-                    {% endif %}
-                    <a href="" data-toggle="collapse" aria-expanded="false">
-                        <i class="fas fa-money-bill"></i>
-                        Withdrawal
-                    </a>
+                {% url 'pending_tasks' as pending_tasks_url %}
+                <li {% if request.path == pending_tasks_url %}class="active"{% endif %}>
+                    <a href="{% url 'pending_tasks' %}">Pending Tasks</a>
                 </li>
+                {% url 'verified_tasks' as verified_tasks_url %}
+                <li {% if request.path == verified_tasks_url %}class="active"{% endif %}>
+                    <a href="{% url 'verified_tasks' %}">Verified Tasks</a>
+                </li>
+                {% url 'disapproved_tasks' as disapproved_tasks_url %}
+                <li {% if request.path == disapproved_tasks_url %}class="active"{% endif %}>
+                    <a href="{% url 'disapproved_tasks' %}">Disapproved Tasks</a>
+                </li>
+                {% else %}
+                {% url 'unattempted_tasks' as unattempted_tasks_url %}
+                <li {% if request.path == unattempted_tasks_url %}class="active"{% endif %}>
+                    <a href="{% url 'unattempted_tasks' %}">Unattempted Tasks</a>
+                </li>
+                {% url 'worker_pending_tasks' as worker_pending_tasks_url %}
+                <li {% if request.path == worker_pending_tasks_url %}class="active"{% endif %}>
+                    <a href="{% url 'worker_pending_tasks' %}">Pending Tasks</a>
+                </li>
+                {% url 'worker_verified_tasks' as worker_verified_tasks_url %}
+                <li {% if request.path == worker_verified_tasks_url %}class="active"{% endif %}>
+                    <a href="{% url 'worker_verified_tasks' %}">Verified Tasks</a>
+                </li>
+                {% url 'worker_disapproved_tasks' as worker_disapproved_tasks_url %}
+                <li {% if request.path == worker_disapproved_tasks_url %}class="active"{% endif %}>
+                    <a href="{% url 'worker_disapproved_tasks' %}">Disapproved Tasks</a>
+                </li>
+                {% endif %}
+              </ul>
+	          </li>
+            {% if user.is_staff %}
+            {% url 'workers' as workers_urlll %}
+	          <li {% if request.path == workers_urlll %}class="active"{% endif %}>
+              <a href="{% url 'workers' %}">Workers</a>
+	          </li>
+            {% endif %}
+            {% url 'withdrawal' as withdrawal_url %}
+	          <li {% if request.path == withdrawal_url %}class="active"{% endif %}>
+              <a href="{% url 'withdrawal' %}">Earnings & Withdrawal</a>
+	          </li>
+            {% if user.is_staff %}
+            {% url 'withdrawalrequests' as withdrawalrequests_url %}
+            <li {% if request.path == withdrawalrequests_url %}class="active"{% endif %}>
+              <a href="{% url 'withdrawalrequests' %}">Withdrawal Requests</a>
+	          </li>
+            {% endif %}
+            {% url 'help_centre' as help_centre_url %}
+            <li {% if request.path == help_centre_url %}class="active"{% endif %}>
+              <a href="{% url 'help_centre' %}">Help Centre</a>
+            </li>
+            {% url 'logout' as logout_url %}
+            <li {% if request.path == logout_url %}class="active"{% endif %}>
+              <a href="{% url 'logout' %}">Log Out</a>
+            </li>
+	        </ul>
 
+	        <div class="footer">
+	        	<p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+						  Copyright &copy;<script>document.write(new Date().getFullYear());</script> Kaycions | All rights reserved | This sidebar template is made <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib.com</a> | 
+              Site Developed by <a target="_blank" href="https://wa.me/2348095602320">Kay Progammer</a>
+						  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+	        </div>
 
-            </ul>
-
-            <ul class="list-unstyled CTAs">
-                <li>
-                    <a href="" class="article" data-toggle="collapse" aria-expanded="false">Help Centre</a>
-                </li>
-                <li>
-                    <a href="" class="article" data-toggle="collapse" aria-expanded="false">Report A Problem</a>
-                </li>
-                <li>
-                    <a href="{% url 'logout' %}" class="download">Log Out</a>
-                </li>
-            </ul>
-        </nav>
+	      </div>
+    	</nav>
 
         <!-- Page Content  -->
-        <div id="content">
+        <div id="content" class="p-4 p-md-5">
 
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container-fluid">
-                    <button type="button" id="sidebarCollapse" class="btn btn-secondary">
-                        <i class="fas fa-align-left"></i>
-                        <span>Menu</span>
-                    </button>
+            <div class="container-fluid">
 
-                </div>
+                <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                <i class="fa fa-bars"></i>
+                <span class="sr-only">Toggle Menu</span>
+                </button>
+
+
+                {% show_notifications %}
+
+                
+            </div>
             </nav>
-                <div class="container">
-                    {% block content %}
 
-                    {% endblock %}
-                </div>
-
+            {% block content %}
+            {% endblock %}
         </div>
     </div>
 
-    <!-- jQuery CDN - Slim version (=without AJAX) -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <!-- Popper.JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#sidebarCollapse').on('click', function () {
-                $('#sidebar').toggleClass('active');
-            });
-        });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
-    <script src="{% static 'js/jquery-3.6.0.js' %}"></script>
+    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'js/popper.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/side.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
+
+    <script type="text/javascript">
+
+    //-----------  NOTIFICATIONS JS CODE----------------------------
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function removeNotification(removeNotificationURL, redirectURL) {
+            const csrftoken = getCookie('csrftoken');
+            let xmlhttp = new XMLHttpRequest();
+
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+                    if (xmlhttp.status == 200) {
+                        window.location.replace(redirectURL);
+                    } else {
+                        alert('There was an error');
+                    }
+                }
+            };
+
+            xmlhttp.open("DELETE", removeNotificationURL, true);
+            xmlhttp.setRequestHeader("X-CSRFToken", csrftoken);
+            xmlhttp.send();
+        }
+
+        function removeAllNotification(removeAllNotificationURL, redirectURL) {
+            const csrftoken = getCookie('csrftoken');
+            let xmlhttp = new XMLHttpRequest();
+
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+                    if (xmlhttp.status == 200) {
+                        window.location.replace(redirectURL);
+                    } else {
+                        alert('There was an error');
+                    }
+                }
+            };
+
+            xmlhttp.open("DELETE", removeAllNotificationURL, true);
+            xmlhttp.setRequestHeader("X-CSRFToken", csrftoken);
+            xmlhttp.send();
+        }
+//---------------------------------------------------------------------------------------
+
+      $(document).on('submit', '.pending-task-form', function(event){
+          event.preventDefault();
+          event.stopPropagation();
+          var btn_id = $(this).children('div').attr('id')
+          var btn_div = $(this).next().attr('id')
+          var link = $(this).children().children('button').attr('data-url')
+          var border_class = $(this).parent().parent('div').attr('id')
+          var border_class2 = $(this).parent().attr('id')
+          var border_class3 = $(this).parent().prev().prev('div .card-header').attr('id')
+          var current_url = "{{request.path}}"
+          var user_dashboard = "{% url 'user-page' %}"
+
+          $.ajax({
+              type: 'POST',
+              url: $(this).attr('action'),
+              data: $(this).serialize(),
+              dataType: 'json',
+              success: function(response) {
+                  if(response.pending === true){
+                    if(current_url === user_dashboard ){
+                      $('#' + btn_id).html('<div style="padding-top: 4px; font-weight: bold; align-self: center; color: white; font-size: 12px;">Pending Approval <i style="color: yellow;" class="fas fa-dot-circle"></i></div>')
+                      $('#' + btn_div).html(`<button id="butt" class="btn btn-sm btn-primary" type="click"><a href="${link}" class="card-link" style="font-weight: bold; font-size:11.5px; color: white;" target="_blank">Check again</a></button>`)
+                      
+                      $('#' + border_class).removeClass('border-primary').addClass('border-warning')
+                      $('#' + border_class2).removeClass('border-primary').addClass('border-warning')               
+                      $('#' + border_class3).removeClass('border-primary').addClass('border-warning')                              
+                      $('.tasks-status').load(window.location.href + ' .tasks-status')
+                    }else{
+                      $('.user-tasks').load(window.location.href + " .user-tasks")
+                    }
+                    var win = window.open(link, '_blank');
+                    if (win) {
+                      win.focus();
+                    }else{
+                      alert('Please allow popups for this website');
+                    }
+                  } 
+              },
+              error: function(rs, e) {
+              },
+          });
+          return false
+      });
+
+      $(document).ready(function() {
+  
+        var loadForm = function () {
+            var btn = $(this);
+            $.ajax({
+                url: btn.attr("data-url"),
+                type: 'get',
+                dataType: 'json',
+                beforeSend: function (e) {
+                    $("#modal-profile .modal-content").html("");
+                    $("#modal-profile").modal("show");
+                },
+                success: function (data) {
+
+                    $("#modal-profile .modal-content").html(data.html_form);
+                    
+                }
+            });
+        };
+
+        $('#file').on('change', function(){
+          const url = URL.createObjectURL($('#file').files[0])
+          $('#img-box').html(`<img src="${url}" width="250" height="282">`)
+        })
+
+        var saveProfileEditForm = function () {
+            var form = $(this);
+            var fd = new FormData(this);
+
+            $.ajax({
+              url: form.attr("action"),
+              data: fd,
+              type: form.attr("method"),
+              dataType: 'json',
+              enctype: 'multipart/form-data',
+              contentType: false,
+              processData: false,
+              cache: false,
+              beforeSend: function(){
+                $('.spinner').show()
+              },
+              success: function (data) {
+                
+                if (data.form_is_valid) {
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Profile has been successfully updated',
+                    button :'Ok',
+                    timer : 2500,
+                  });
+                  $("#profile-list").html(data.html_profile_list);
+                  $(".img").load(window.location.href + " .img");
+                  $(".dispname").load(window.location.href + " .dispname");
+                  $("#modal-profile").modal("hide");
+                }
+
+                else {
+                  $("#modal-profile .modal-content").html(data.html_form);
+                }
+              }
+            });
+            return false;
+        };
+
+        /* Binding */
+        $(".js-edit-profile").click(loadForm);
+        $("#modal-profile").on("submit", ".js-profile-edit-form", saveProfileEditForm);
+
+      });
+
+      $(document).on('click', '.dropdown-menu', function(e){
+        e.stopPropagation();
+      
+      })
+
+    </script>
 
     {% block javascript %} {% endblock %}
 
 {% load sweetify %}
 {% sweetify %}
-
-</body>
-
-
+  </body>
 </html>
-
-
-
-
-

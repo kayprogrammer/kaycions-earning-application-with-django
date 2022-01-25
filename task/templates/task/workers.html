@@ -1,0 +1,46 @@
+{% extends 'task/sidmain.html' %}
+
+{% load static %}
+
+{% block title %}Kaycions | All Workers{% endblock %}
+
+{% block content %}
+
+<div class="card-group" style="margin-top:30px;">
+    <div class="card card-body table-responsive" style="background-color:lightgrey;">
+        <div class="table-responsive">
+          <table style="border-top: 1px solid darkgray; border-bottom: 1px solid darkgray; border-left: 1px solid darkgray; border-right: 1px solid darkgray;" class="table table-sm table-responsive" id="task-table">
+
+            <tr>
+                <th style="border-right: 1px solid darkgray;">Name</th>
+                <th style="border-right: 1px solid darkgray;">Email</th>
+                <th style="border-right: 1px solid darkgray;">Facebook ID</th>
+                <th style="border-right: 1px solid darkgray;">Twitter ID</th>
+                <th style="border-right: 1px solid darkgray;">Instagram ID</th>
+                <TH style="border-right: 1px solid darkgray;">Youtube ID</TH>
+                <th style="border-right: 1px solid darkgray;">Paypal Address</th>
+                <th style="border-right: 1px solid darkgray;">Refferals Total</th>
+              
+            </tr>
+              {% for w in workers %}
+                <tr style="font-size: 11px; text-align: center; font-weight: bold;">
+                  <td style="border-right: 1px solid darkgray;"><a style="color: blue;" href="{% url 'worker' w.id %}">{{w.full_name|capfirst}}</a></td>
+                  <td style="border-right: 1px solid darkgray;">{{w.email}}</td>
+                  <td style="border-right: 1px solid darkgray;">{{w.facebook_id|default:"-------"}}</td>
+                  <td style="border-right: 1px solid darkgray;">{{w.twitter_id|default:"-------"}}</td>
+                  <td style="border-right: 1px solid darkgray;">{{w.instagram_id|default:"-------"}}</td>
+                  <td style="border-right: 1px solid darkgray;">{{w.youtube_id|default:"-------"}}</td>
+                  <td style="border-right: 1px solid darkgray;">{{w.paypal_address|default:"-------"}}</td>
+                  <td style="border-right: 1px solid darkgray;">{{w.user.ref_by.all.count}}</td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="8" class="text-center">No Workers Yet!</td>
+                </tr>
+              {% endfor %}
+
+          </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

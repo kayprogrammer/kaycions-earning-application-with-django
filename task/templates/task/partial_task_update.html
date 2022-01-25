@@ -1,13 +1,18 @@
 <form method="post" action="{% url 'update_task' form.instance.pk %}" class="js-task-update-form">
     {% csrf_token %}
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
         <h4 class="modal-title">Update task</h4>
     </div>
     <div class="modal-body">
         {% include 'task/task_form.html' %}
+        <div class="row spinner" style="display: none; margin-left: auto; order: 2;">
+            <div class="spinner-border mt-1" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

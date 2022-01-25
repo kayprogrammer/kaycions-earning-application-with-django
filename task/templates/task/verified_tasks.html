@@ -1,0 +1,47 @@
+{% extends 'task/sidmain.html' %}
+{% load static %}
+
+{% block title %}Kaycions | Verified Tasks{% endblock %}
+
+{% block content %}
+
+    <div class="row" style="margin-top:30px;">
+        <div class="col-md">
+            <div class="card card-body" style="background-color:lightgrey;">
+                <div class="table-responsive">
+                  <table class="table table-sm" id="task-table">
+
+                    <tr>
+                        <th>Task</th>
+                        <th>Price</th>
+                        <th>Worker</th>
+                        <th>Link</th>
+                        <th>Task Expires</th>
+                        <th>Disapprove</th>
+                      
+                      </tr>
+                      {% for t in tasks %}
+                        <tr style="font-size: 11px;">
+                          <td>{{t.category}} {{t.category_2}}</td>
+                          <td>${{t.price|floatformat:2}}</td>
+                          <td><a style="color: blue;" href="{% url 'worker' t.worker.id %}">{{t.worker|capfirst}}</a></td>
+                          <td><a style="font-size: 11px;" class="btn btn-sm btn-success" href="{{t.link}}" target="_blank">Link</a></td>
+                          <td>{{t.task_expiry_date}} {{t.task_expiry_time}}</td>
+                          <td><a style="font-size: 11px;" type="button" class="btn btn-danger btn-sm" href="{% url 'disapprove_task' t.id %}"> Disapprove</a></td>
+                        </tr>
+                      {% empty %}
+                        <tr>
+                          <td colspan="8" class="text-center">No verified tasks</td>
+                        </tr>
+                      {% endfor %}
+
+                  </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}

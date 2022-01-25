@@ -1,0 +1,44 @@
+{% extends 'task/sidmain.html' %}
+
+{% load static %}
+
+{% block title %}Kaycions | My Disapproved Tasks{% endblock %}
+
+{% block content %}
+
+<h4 style="font-weight: bold; color: #35424a;">DISAPPROVED TASKS</h1>
+<p style="color: orange; font-weight: bold;">Tasks deletes automatically upon expiry!</p>
+
+<div class="row no-gutters table-responsive">
+    <div class="card-group user-tasks" >
+    {% for t in worker_disapproved_tasks %}
+
+        <div class="card border-danger mb-1 mr-1">
+            <div style="align-items: center; background-color: #35424a;" class="card-header border-danger d-flex"><div style="color: white; width: 200px; font-size:15px; font-weight:bold;">{% if t.category == 'Facebook' %}
+                <i class="fab fa-facebook"></i> 
+            {% elif t.category == 'Twitter' %}
+                <i class="fab fa-twitter"></i> 
+            {% elif t.category == 'Instagram' %}
+                <i class="fab fa-instagram"></i> 
+            {% elif t.category == 'Youtube' %}
+                <i class="fab fa-youtube"></i>                     
+            {% elif t.category == 'Edit' %}
+                {{t.category}}
+            {% endif %}
+            {{t.category_2}}</div> <div style="color: white; width: 150px; font-size: 13px; text-align: right; font-weight: bold; margin-left: auto; order: 2;">Worth: ${{t.price}}</div></div>
+            <div class="card-body text-success">
+            <h5 class="card-title" style="font-size: 14px; font-weight: bold;">Expires: {{t.task_expiry_time|time:"h:ia "}}. {{t.task_expiry_date|date:"D M d Y "}}</h5>
+            <p class="card-text" style="font-weight: bold; font-size: 13px;">{{t.description}}</p>
+            </div>
+            <div class="card-footer border-danger d-flex" style="background-color: #35424a;">
+                <div style="font-weight: bold; align-self: center; font-size: 12px; color: white;">Disapproved <i style="color: red;" class="fas fa-times-circle"></i></div>
+                <div style="text-align: right; margin-left: auto; order: 2;"><button id="butt" class="btn btn-sm btn-danger" style="font-weight: bold; font-size: 11.5px;" type="click" disabled>Ignore Task</button></div>
+            </div>
+        </div>
+    {% empty %} 
+    <p style="color: blue; text-align: right;">You have no disapproved tasks!</p>               
+    {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

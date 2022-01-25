@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block title %}<title>Kaycions | Faqs</title>{% endblock %}
+{% block title %}<title>Kaycions | Terms & Conditions</title>{% endblock %}
 
 {% block content %}
 
@@ -15,14 +15,14 @@
   </form>
 </nav>
 
-<h1 class="faqq">FREQUENTLY ASKED QUESTIONS</h1>
+<h1 class="faqq">TERMS AND CONDITIONS</h1>
 <div class="row container-fluid mt-4">
   <div class="card" style="background-color:#dbdbdb;">
       <div class="card-body bs-callout">
-          {% for f in faqs %}
+          {% for t in terms %}
           <div class="bs-callout bs-callout-danger">
-            <h4 style="font-weight: bold;">{{f.faqs_title}}:</h4>
-            <p>{{f.faqs_text}}</p>
+            <h4 style="font-weight: bold;">{{t.terms_title}}:</h4>
+            <p>{{t.terms_text}}</p>
           </div>
           {% endfor %}
       </div>

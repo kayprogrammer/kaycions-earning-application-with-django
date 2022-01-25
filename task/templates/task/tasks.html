@@ -1,40 +1,37 @@
 {% extends 'task/sidmain.html' %}
 {% load static %}
-{% block javascript %}
-  <script src="{% static 'js/script.js' %}"></script>
-{% endblock %}
+
+{% block title %}Kaycions | All Tasks{% endblock %}
+
 {% block content %}
 
-
     <div class="row" style="margin-top:30px;">
-        <div class="col-md">
+        <div class="col">
             <div class="card card-body" style="background-color:lightgrey;">
                 <button type="button" class="btn btn-primary btn-sm btn-block js-create-task" data-url="{% url 'create_task' %}" style="font-weight:bold;">CREATE TASK</button>
-                <table class="table table-sm" id="task-table">
-                    <tr>
-                        <th>Task</th>
-                        <th>Price</th>
-                        <th>Date Created</th>
-                        <th>Link</th>
-                        <th>Task Expires</th>
-                        <th>Update</th>
-                        <th>Delete</th>
+                <div class="table-responsive">
+                  <table class="table table-sm" id="task-table">
 
-                    </tr>
+                      {% include 'task/partial_task_list.html' %}
 
-                    {% include 'task/partial_task_list.html' %}
-
-                </table>
+                  </table>
+                </div>
                 <div class="modal fade" id="modal-task">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog modal-lg">
                         <div class="modal-content"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+    
 {% endblock %}
+
+{% block javascript %}
+  <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+{% endblock javascript %}
+
+
 <!--------
 Swal.fire({
   title: 'Are you sure?',

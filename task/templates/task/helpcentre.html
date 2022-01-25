@@ -1,0 +1,43 @@
+{% extends 'task/sidmain.html' %}
+
+{% load static %}
+
+{% block title %}Kaycions | Help Centre{% endblock %}
+
+{% block content %}
+<h2 style="font-weight:bold; color:#ffc107;">HELP CENTRE</h2>
+{% for a in about %}
+<div class="row">
+    <div class="card" style="background-color: #f8f9fa;">
+        <div class="card-body bs-callout ">
+            <div class="bs-callout bs-callout-danger">
+                <h4>Our Contact Details:</h4>
+                <p>You can reach us via the following details. But please note that these details are not really active as this is just a test site. When it has been bought, it will be updated</p>
+                <p>Email: <a href="mailto:{{a.email|default:'#'}}">{{a.email|default:"example@gmail.com"}}</a></p>
+                <p>Phone: <a href="tel:{{a.phone|default:'#'}}"></a>{{a.phone}}</p>
+                <address>Address: {{a.address}}</address>
+                <p>Facebook: <a href="{{a.facebook_link|default:'#'}}">{{a.facebook}}</a></p>
+                <p>Whatsapp: <a href="{{a.whatsapp_link|default:'#'}}">{{a.whatsapp}}</a></p>
+                <p>Twitter: <a href="{{a.twitter_link|default:'#'}}">{{a.twitter}}</a></p>
+                <p>Instagram: <a href="{{a.instagram_link|default:'#'}}">{{a.instagram}}</a></p>
+                <p>LinkedIn: <a href="{{a.linkedin_link|default:'#'}}">{{a.linkedin}}</a></p>
+            </div>
+
+            <div class="bs-callout bs-callout-danger mt-3">
+                <h4>Report A Problem</h4>
+                <p>Do you have any issues on ground, Or you have a message for us. Tell us something</p>
+                <p>Send as <strong>{{user.worker}}</strong></p>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{form.text}}
+                    <button type="submit" class="btn btn-success btn-sm">Send</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% empty %}
+<p style="text-align: center; color: blue; font-size: 15px;">There is nothing here yet</p>
+{% endfor %}
+{% endblock %}

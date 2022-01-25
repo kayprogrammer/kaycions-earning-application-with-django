@@ -1,0 +1,33 @@
+{% extends 'task/main.html' %}
+
+{% load static %}
+
+{% block title %}<title>Kaycions | Used link</title>{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="{% static '/css/login_style.css' %}?{% now "U" %}">
+
+	<div class="container-fluid" style="display: flex; justify-content: center; align-items: center; min-height: calc(100vh - 165px); max-height: calc(100vh - 165px);">
+		<div class="d-flex justify-content-center h-100">
+			<div class="user_card" style="color: #e8491d;">
+				<div class="d-flex justify-content-center">
+					<h3 id="form-title">USED LINK</h3>
+				</div>
+				<div class="justify-content-center form_container">
+					<div class="d-flex justify-content-center mt-3 login_container">
+						<p>This link has already been used. Please try logging in to your account</p>
+					</div>
+					<div class="d-flex justify-content-center mt-2  mb-3 login_container">
+						<button onclick="window.location=`{% url 'login' %}`;" class="btn login_btn" type="submit">Login</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+{% endblock %}

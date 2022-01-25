@@ -1,0 +1,31 @@
+{% extends 'task/sidmain.html' %}
+{% load static %}
+
+{% block title %}Kaycions | Verified Withdrawal Requests{% endblock %}
+
+{% block content %}
+
+<h4 style="font-weight: bold; color: #35424a;">VERIFIED WITHDRAWAL REQUESTS</h1>
+    
+<div class="row no-gutters table-responsive">
+    <div class="card-group user-tasks" >
+    {% for w in withdrawalrequests %}
+        <div class="card border-success mb-1 mr-1">
+            <div style="align-items: center; background-color: #35424a;" class="card-header border-success d-flex"><div style="color: white; width: 200px; font-size:15px; font-weight:bold;">{{w.worker|capfirst}}
+                </div> <div style="color: white; width: 150px; font-size: 13px; text-align: right; font-weight: bold; margin-left: auto; order: 2;">${{w.amount_withdraw}}</div></div>
+            <div class="card-body text-success">
+            <h5 class="card-title" style="font-size: 14px; font-weight: bold;">Request</h5>
+            <p class="card-text" style="font-weight: bold; font-size: 13px; ">Payment of ${{w.amount_withdraw}} to "{{w.worker.paypal_address|truncatechars:15}}" has been made successfully</p>
+            </div>
+            <div class="card-footer border-success d-flex" style="background-color: #35424a;">
+                <div style="font-weight: bold; align-self: center; font-size: 12px; color: white;">Verified <i style="color: lightgreen;" class="fas fa-check-circle"></i></div>
+                <div style="text-align: right; margin-left: auto; order: 2;"><button style="font-size: 11.5px; font-weight: bold;" disabled id="butt" class="btn btn-sm btn-success" type="click">Approve</button></div>
+            </div>
+        </div>
+    {% empty %} 
+        <p style=" color: blue;">There are no verified withdrawal requests!</p>               
+    {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

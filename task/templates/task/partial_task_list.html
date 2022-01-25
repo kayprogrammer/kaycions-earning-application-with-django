@@ -1,12 +1,34 @@
+<tr>
+  <th>Task</th>
+  <th>Price</th>
+  <th>Worker</th>
+  <th>Link</th>
+  <th>Task Expires</th>
+  <th>Task Status</th>
+  <th>Update</th>
+  <th>Delete</th>
+
+</tr>
 {% for t in tasks %}
-  <tr>
+  <tr style="font-size: 11px;">
     <td>{{t.category}} {{t.category_2}}</td>
     <td>${{t.price|floatformat:2}}</td>
-    <td>{{t.date_created}}</td>
-    <td><a class="btn btn-sm btn-success" href="{{t.link}}">Link</td>
+    <td><a style="color: blue;" href="{% url 'worker' t.worker.id %}">{{t.worker|capfirst}}</a></td>
+    <td><a style="font-size: 11px;" class="btn btn-sm btn-success" href="{{t.link}}" target="_blank">Link</a></td>
     <td>{{t.task_expiry_date}} {{t.task_expiry_time}}</td>
-    <td><button type="button" class="btn btn-info btn-sm js-update-task" data-url="{% url 'update_task' t.id %}">Update</button></td>
-    <td><button type="button" class="btn btn-danger btn-sm js-delete-task" data-url="{% url 'delete_task' t.id %}"> Delete</button></td>
+    <td>
+      {% if t.pending != False %}
+        Pending
+      {% else %}
+        {% if t.completed != False %}
+          Completed
+        {% else %}
+          Not Attempted
+        {% endif %}
+      {% endif %}
+  </td>
+    <td><button style="font-size: 11px;" type="button" class="btn btn-info btn-sm js-update-task" data-url="{% url 'update_task' t.id %}">Update</button></td>
+    <td><button style="font-size: 11px;" type="button" class="btn btn-danger btn-sm js-delete-task" data-url="{% url 'delete_task' t.id %}"> Delete</button></td>
   </tr>
 {% empty %}
   <tr>

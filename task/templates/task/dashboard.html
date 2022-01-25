@@ -4,20 +4,17 @@
 
 {% block content %}
 
-<div class="contentt" style="">
-
     {% include 'task/status.html' %}
 
     <br>
 
     <div class="row">
-        <div class="col-md-5">
-            <h5>WORKERS:</h5>
+        <div class="col-md-5 mb-4">
+            <h5 style="font-weight: bold;">WORKERS:</h5>
             <hr>
-            <div class="card card-body" style="background-color:lightgrey;">
+            <div class="card card-body table-responsive" style="background-color:lightgrey;">
                 <table class="table table-sm">
                     <tr>
-                        <th></th>
                         <th>Worker</th>
                         <th>Email</th>
                     </tr>
@@ -25,9 +22,12 @@
 
                     {% for worker in workers %}
                         <tr>
-                            <td><a class="btn btn-sm btn-info" href="{% url 'worker' worker.id %}" style="font-size:11px;">View</a></td>
-                            <td style="font-size:11px;">{{worker.user}}</td>
+                            <td style="font-size:11px;"><a href="{% url 'worker' worker.id %}" style="color: blue;">{{worker.user|capfirst}}</a></td>
                             <td style="font-size:11px;">{{worker.email}}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="8" class="text-center">No workers yet!</td>
                         </tr>
                     {% endfor %}
 
@@ -36,34 +36,44 @@
         </div>
 
         <div class="col-md-7">
-            <h5>LAST 5 ATTEMPTED TASKS:</h5>
+            <h5 style="font-weight: bold;">LATEST ATTEMPTED TASKS:</h5>
             <hr>
-            <div class="card card-body" style="background-color:lightgrey;">
+            <div class="card card-body table-responsive" style="background-color:lightgrey;">
                 <table class="table table-sm">
                     <tr>
                         <th>Task</th>
-                        <th>Date Performed</th>
-                        <th>Status</th>
+                        <th>Worker</th>
+                        <th>Updated</th>
+                        <th>Link</th>
                         <th>Verify</th>
                         <th>Disapprove</th>
 
                     </tr>
 
-                    {% for t in task_items %}
-                        <tr>
-                            <td>{{t.task}}</td>
-                            <td>{{t.date_performed}}</td>
-                            <td>{{t.status}}</td>
-                            <td><a class="btn btn-sm btn-info" href="">Verify</a></td>
-                            <td><a class="btn btn-sm btn-danger" href="">Disapprove</a></td>
-                        </tr>
+                    
+                    {% for t in pending_tasks %}
+                    <tr style="font-size:11px;">
+                        <td>{{t.category}} {{t.category_2}}</td>
+                        <td><a style="color: blue;" href="{% url 'worker' t.worker.id %}">{{t.worker|capfirst}}</a></td>
+                        <td>{{t.updated}}</td>
+                        <td><button style="font-size: 11px;" class="btn btn-sm btn-success"><a style="color: white;" href="{{t.link}}" target="_blank">Check</a></button></td>
+                        <td><a style="font-size: 11px;" class="btn btn-sm btn-info" href="{% url 'verify_task' t.id %}">Verify</a></td>
+                        <td><a style="font-size: 11px;" class="btn btn-sm btn-danger" href="{% url 'disapprove_task' t.id %}">Disapprove</a></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center">There are no pending tasks</td>
+                    </tr>
                     {% endfor %}
+                    </tr>  
+                    
 
                 </table>
             </div>
         </div>
 
     </div>
-</div>
+
+    
 
 {% endblock %}

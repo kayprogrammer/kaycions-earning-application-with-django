@@ -1,0 +1,11 @@
+{% autoescape off %}
+
+Hello {{user.full_name|capfirst}}
+
+Please click the link below to verify your account
+
+http://{{domain}}{% url 'activate' uidb64=uid token=token %}
+
+Please note that this link can be only used once
+
+{% endautoescape %}
