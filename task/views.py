@@ -236,7 +236,7 @@ def loginPage(request):
                 sweetify.warning(request, title='Warning', text='Email is not verified. Please check your email inbox or spam for verification link', icon='warning', button='Ok', timer=4000)
                 return redirect('login')
         else:
-            sweetify.error(request, title='Error', text='Your email OR password is incorrect', icon='error', button='Ok', timer=3000)
+            sweetify.error(request, title='Error', text='The email OR password you entered is incorrect', icon='error', button='Ok', timer=3000)
     context = {}
     return render(request, 'task/log.html', context)
 
