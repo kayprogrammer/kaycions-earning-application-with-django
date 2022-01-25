@@ -1,21 +1,18 @@
-body,
-html {
+body{
+    height: 100vh;
     margin: 0;
-    padding: 0;
-    height: 125%;
-    background: #dbdbdb !important;
+    display: flex;
+    flex-direction: column;
 }
+
 .user_card {
     width: 350px;
-    height:900px;
-    margin-top:50px;
-    margin-bottom: 0px;
-    background: #35424a;
+    background: #212529;
     position: relative;
     display: flex;
     justify-content: center;
     flex-direction: column;
-    padding: 10px;
+    padding: 15px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -24,12 +21,12 @@ html {
 }
 
 .form_container {
-    padding-left:20px;
-    margin-top: 30px;
+    margin-top: 10px;
 }
 
 #form-title{
     color: #e8491d;
+    font-weight: bold;
 }
 .login_btn {
     position:relative;
@@ -58,27 +55,48 @@ html {
 }
 
 footer{
-  padding-bottom:20;
-  padding:6px;
-  margin-top:20px;
-  color:#ffffff;
-  background-color:#e8491d;
-  text-align: center;
-}
-
-footer .foot{
-    margin-top:17px;
-}
-
-.errors{
-    margin-top:5px;
-    margin-bottom:5px;
-    font-size:13px;
-    color:orange;
+    min-height: 80px;
+    margin-bottom: auto;
 }
 
 @media (max-width: 768px) {
     .login_btn{
         float:center;
     }
+}
+
+input.checkbox {
+    background: white;
+    cursor: pointer;
+    width: 13px;
+    height: 13px;
+  }
+
+.errors{
+    font-size: 11px;
+    color: orange;
+}
+
+@media (max-width: 320px) {
+
+    #form-title{
+        font-size: 25px;
+    }
+
+}
+
+@media (max-width: 290px) {
+
+    #form-title{
+        font-size: 22px;
+    }
+
+}
+
+@media (max-width: 369px) {
+
+    .user_card{
+        width: 100%;
+    }
+
 }

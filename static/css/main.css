@@ -2,9 +2,13 @@ body{
   font: 15px/1.5 Arial, Helvetica,sans-serif, cursive, Apple Chancery;
   padding:0;
   margin:0;
-  background-color:#f4f4f4;
+  background-color:#dbdbdb;
+  min-height: 100%;
 }
 
+html{
+  min-height: 100%;
+}
 /* Global */
 .container{
   width:85%;
@@ -12,18 +16,32 @@ body{
   overflow:hidden;
 }
 
-ul{
-  margin:0;
-  padding:0;
+.nav-link{
+  color:white !important;
 }
 
-.button_1{
-  height:38px;
-  background:#e8491d;
-  border:0;
-  padding-left: 20px;
-  padding-right:20px;
-  color:#ffffff;
+.active{
+  color:#e8491d !important;
+}
+
+.nav-link:hover{
+  color: lightgray !important;
+}
+
+.navbar-nav .nav-item .nav-link{
+  margin-left: 10px;
+}
+
+.faqq{
+  font-weight: bold; 
+  text-align: center;
+  margin-top: 10px;
+}
+
+@media(max-width:360px){
+  .faqq{
+    font-size: 20px;
+  }
 }
 
 .dark{
@@ -32,52 +50,6 @@ ul{
   color:#ffffff;
   margin-top:10px;
   margin-bottom:10px;
-}
-
-/* Header **/
-header{
-  background:#35424a;
-  color:#ffffff;
-  padding-top:16px;
-  padding-bottom:16px;
-  min-height:30px;
-  border-bottom:#e8491d 2px solid;
-}
-
-header a{
-  color:#ffffff;
-  text-decoration:none;
-  text-transform: uppercase;
-  font-size:16px;
-}
-
-header li{
-  float:left;
-  display:inline;
-  padding: 0 20px 0 20px;
-}
-
-header #branding{
-  float:left;
-}
-
-header #branding h1{
-  margin:0;
-}
-
-header nav{
-  float:right;
-  margin-top:10px;
-}
-
-header .highlight, header .current a{
-  color:#e8491d;
-  font-weight:bold;
-}
-
-header a:hover{
-  color:#cccccc;
-  font-weight:bold;
 }
 
 /* Showcase */
@@ -90,7 +62,8 @@ header a:hover{
 
 #showcase h1{
   margin-top:50px;
-  font-size:55px;
+  font-size:30px;
+  font-weight:bold;
   margin-bottom:10px;
 }
 
@@ -100,9 +73,10 @@ header a:hover{
 
 /* Newsletter */
 #newsletter{
-  padding:9px;
+  display: flex;
+  padding:15px;
   color:#ffffff;
-  background:#35424a
+  background:#212529;
 }
 
 #newsletter h1{
@@ -111,53 +85,49 @@ header a:hover{
 
 #newsletter form {
   float:right;
-  margin-top:15px;
+
 }
 
-#newsletter input[type="email"]{
-  padding:4px;
-  height:25px;
-  width:250px;
+.bg-gray{
+  background-color: grzz;
 }
 
-/* Boxes */
-#boxes{
-  margin-top:20px;
+.row .col-4{
+  min-width: 300px;
 }
 
-#boxes .box{
-  float:left;
-  text-align: center;
-  width:30%;
-  padding:10px;
+.row .col{
+  min-width: 500px;
 }
 
-#boxes .box img{
-  width:90px;
+.contt{
+  padding:50px;
 }
 
-#howitworks{
-  padding:9px;
-  margin-top:0px;
-  color:#ffffff;
-  background:#35424a
+@media(max-width:875px){
+  .row .col-4{
+    min-width: 300px;
+  }
+  
+  .row .col{
+    min-width: 400px;
+    margin-bottom: 25px;
+  }
 }
 
-#howitworks h1{
-    text-align:center;
-}
+@media(max-width:476px){
+  .row .col-4{
+    min-width: 100%;
+  }
+  
+  .row .col{
+    min-width: 100%;
+    margin-bottom: 25px;
+  }
 
-
-/* Sidebar */
-aside#sidebar{
-  float:right;
-  width:30%;
-  margin-top:130px;
-}
-
-aside#sidebar .quote input, aside#sidebar .quote textarea{
-  width:90%;
-  padding:5px;
+  .contt{
+    padding:30px;
+  }
 }
 
 /* Main-col */
@@ -216,13 +186,16 @@ ul#Questions li{
 }
 
 footer{
-  padding-bottom:20;
-  padding:8px;
-  margin-top:20px;
+  padding-top: 28px;
+  padding-bottom: 10px;
+
+  vertical-align: middle;
   color:#ffffff;
   background-color:#e8491d;
   text-align: center;
+
 }
+
 
 /* Media Queries */
 @media(max-width: 768px){
@@ -280,4 +253,48 @@ footer{
   padding:10px;
   }
 
+}
+
+.bs-callout {
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  border-color: #eee;
+  border-image: none;
+  border-radius: 3px;
+  border-style: solid;
+  border-width: 1px 1px 1px 5px;
+  padding: 20px;
+}
+.bs-callout:last-child {
+  margin-bottom: 0px;
+}
+.bs-callout h4 {
+  margin-bottom: 10px;
+  margin-top: 0;
+}
+
+.bs-callout h6{
+  font-style: italic;
+  font-size: 0.7em;
+  color: #212529;
+}
+
+.bs-callout p{
+  font-size: 1em;
+}
+
+.bs-callout-danger {
+  border-left-color: #212529;
+}
+
+.bs-callout-danger h4{
+  color: #212529;
+}
+
+@media(max-width:991px){
+  .navbar-nav .nav-item .nav-link{
+    margin-left: 0;
+  }
 }

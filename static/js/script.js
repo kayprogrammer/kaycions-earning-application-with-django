@@ -23,6 +23,9 @@ $(document).ready(function() {
           data: form.serialize(),
           type: form.attr("method"),
           dataType: 'json',
+          beforeSend: function(){
+            $('.spinner').show()
+          },
           success: function (data) {
             data.preventDefault;
             if (data.form_is_valid) {
@@ -52,6 +55,9 @@ $(document).ready(function() {
           data: form.serialize(),
           type: form.attr("method"),
           dataType: 'json',
+          beforeSend: function(){
+            $('.spinner').show()
+          },
           success: function (data) {
             data.preventDefault;
             if (data.form_is_valid) {
@@ -81,6 +87,9 @@ $(document).ready(function() {
           data: form.serialize(),
           type: form.attr("method"),
           dataType: 'json',
+          beforeSend: function(){
+            $('.spinner').show()
+          },
           success: function (data) {
             data.preventDefault;
             if (data.form_is_valid) {

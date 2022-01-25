@@ -1,16 +1,15 @@
-body,
-html {
+body{
+    height: 100vh;
     margin: 0;
-    padding: 0;
-    height: 88.115%;
-    background: #dbdbdb !important;
+    display: flex;
+    flex-direction: column;
 }
+
 .user_card {
     width: 350px;
-    height:320px;
     margin-top: auto;
     margin-bottom: auto;
-    background: #35424a;
+    background: #212529;
     position: relative;
     display: flex;
     justify-content: center;
@@ -29,6 +28,7 @@ html {
 
 #form-title{
     color: #e8491d;
+    font-weight: bold;
 
 }
 
@@ -56,28 +56,15 @@ html {
     outline: 0px !important;
 }
 
-#messages{
-
-    background-color:#e8491d;
-    color: #fff;
-    padding: 10px;
-    margin-top: 10px;
-    margin-bottom:0;
-    font-size:15px;
-
-}
-
-
 footer{
-  padding-bottom:20;
-  padding:6px;
-  margin-top:20px;
-  color:#ffffff;
-  background-color:#e8491d;
-  text-align: center;
+    min-height: 80px;
+    margin-bottom: auto;
 }
 
-footer .foot{
-    margin-top:17px;
-}
+@media (max-width: 369px) {
 
+    .user_card{
+        width: 100%;
+    }
+
+}
