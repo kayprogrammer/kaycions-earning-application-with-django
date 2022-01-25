@@ -1,3 +1,4 @@
+from django.db.models import fields
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
@@ -9,47 +10,62 @@ from . models import *
 
 
 class SuscribersForm(ModelForm):
-    email = forms.CharField(widget=forms.EmailInput(attrs={'class':'input', 'rows':2, 'placeholder':'Enter your email...'}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class':'form-control mr-sm-2', 'type':'email', 'placeholder':'Your email address...'}))
 
     class Meta:
         model = Suscribers
-        fields = '__all__'
+        fields = ['email']
 
 class ContactForm(ModelForm):
 
-    name = forms.CharField(widget=forms.TextInput(attrs={'class':'input', 'placeholder':'Enter your name...'}))
-    email = forms.CharField(widget=forms.EmailInput(attrs={'class':'input', 'placeholder':'Enter your email...'}))
-    message = forms.CharField(widget=forms.Textarea(attrs={'class':'input', 'rows':3, 'placeholder':'Enter your message...'}))
+    name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Enter your name...'}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class':'form-control', 'placeholder':'Enter your email...'}))
+    message = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control', 'rows':3, 'placeholder':'Enter your message...'}))
 
     class Meta:
         model = Contact
-        fields = '__all__'
+        fields = ['name', 'email', 'message']
 
-class WorkersForm(ModelForm):
+
+class ProfileForm(ModelForm):
+    full_name = forms.CharField(max_length=80, validators=[full_regex_pattern, fullnameValidator], widget=forms.TextInput())
+    facebook_id = forms.CharField(max_length=80, widget=forms.TextInput())
+    twitter_id = forms.CharField(max_length=80, validators=[IdValidator], widget=forms.TextInput())
+    instagram_id = forms.CharField(max_length=80, validators=[IdValidator], widget=forms.TextInput())
+    youtube_id = forms.EmailField(max_length=80, validators=[youtubeIdValidator], widget=forms.TextInput())
+    paypal_address = forms.EmailField(max_length=80, widget=forms.TextInput())
+    avatar = forms.ImageField(required=False, validators=[avatar_size], widget=forms.FileInput(attrs={ 'type':'file', 'id':'file', 'size':5, 'class':'input-file' }))
+
     class Meta:
         model = Worker
         fields = '__all__'
-        exclude = ['user']
+        exclude = ['user', 'email', 'date_created', 'recommended_by', 'updated', 'code']
 
-class AdminTaskForm(ModelForm):
+class TaskForm(ModelForm):
+    task_expiry_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type':'date'}))
+    task_expiry_time = forms.TimeField(required=False, widget=forms.TimeInput(attrs={'type':'time'}))
 
     class Meta:
-        model = AdminTask
+        model = Task
         fields = '__all__'
+        exclude = ['worker', 'pending', 'completed', 'disapproved']
+
+class WithdrawalForm(ModelForm):
+
+    class Meta:
+        model = Withdrawal
+        fields = '__all__'
+        exclude = ['worker', 'paypal_address', 'amount_withdraw', 'date_created', 'verified']
 
 class RegisterForm(UserCreationForm):
-    full_name = forms.CharField(max_length=40, help_text='Full name', validators=[full_regex_pattern, fullnameValidator], widget=forms.TextInput(attrs={'class':'input', 'placeholder':'Enter your full name...'}))
-    username = forms.CharField(max_length=15, help_text='Username', validators=[usernameValidator], widget=forms.TextInput(attrs={'class':'input', 'placeholder':'Enter your username...'}))
-    email = forms.CharField(max_length=40, help_text='Email', widget=forms.EmailInput(attrs={'class':'input', 'placeholder':'Enter your email...'}))
-    password1 = forms.CharField(max_length=25, help_text='Password', widget=forms.PasswordInput(attrs={'class':'input', 'placeholder':'Enter your password...'}))
-    password2 = forms.CharField(max_length=25, help_text='Password Confirmation', widget=forms.PasswordInput(attrs={'class':'input', 'placeholder':'Confirm your password...'}))
-    twitter_id = forms.CharField(max_length=30, help_text='Twitter ID', validators=[twitterIdValidator], widget=forms.TextInput(attrs={'class':'input', 'placeholder':'e.g @example...'}))
-    instagram_id = forms.CharField(max_length=30, help_text='Instagram ID', validators=[instagramIdValidator], widget=forms.TextInput(attrs={'class':'input', 'placeholder':'e.g @example...'}))
-    youtube_id = forms.CharField(max_length=40, help_text='Youtube ID', validators=[youtubeIdValidator], widget=forms.EmailInput(attrs={'class':'input', 'placeholder':'e.g example@gmail.com...'}))
-
+    full_name = forms.CharField(max_length=40, help_text='Full name', validators=[full_regex_pattern, fullnameValidator], widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Full name...', 'id':'fullnamefield'}))
+    email = forms.CharField(max_length=40, help_text='Email', widget=forms.EmailInput(attrs={'class':'form-control', 'placeholder':'Email address...', 'id':'emailfield'}))
+    password1 = forms.CharField(max_length=25, help_text='Password', widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'Password...', 'id':'passwordfield1'}))
+    password2 = forms.CharField(max_length=25, help_text='Password Confirmation', widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'Confirm password...', 'id':'passwordfield2'}))
+    terms_confirmed = forms.BooleanField(required=True, widget=forms.CheckboxInput(attrs={'class':'checkbox', }))
     class Meta:
         model = User
-        fields = ['full_name', 'username', 'email', 'password1', 'password2', 'twitter_id', 'instagram_id', 'youtube_id']
+        fields = ['full_name', 'email', 'password1', 'password2']
 
     '''
     def __init__(self, *args, **kwargs):
@@ -62,6 +78,17 @@ class RegisterForm(UserCreationForm):
         password_field.validators.append(MinLengthValidator(limit_value=8))
     '''
 
+    def clean_password1(self):
+        super(RegisterForm, self).clean()
+
+        # This method will set the `cleaned_data` attribute
+
+        password1 = self.cleaned_data.get('password1')
+        
+        if len(password1) < 8:
+            raise forms.ValidationError('Password is too short')
+        return password1
+
 
     def clean_password2(self):
         super(RegisterForm, self).clean()
@@ -72,9 +99,12 @@ class RegisterForm(UserCreationForm):
         password2 = self.cleaned_data.get('password2')
         if not password1 == password2:
             raise forms.ValidationError('Password Mismatch')
-        if len(password1) < 8:
-            raise forms.ValidationError('Password is too short')
         return password2
 
 
 
+class ComplainForm(ModelForm):
+    text = forms.CharField(required=True, widget=forms.Textarea(attrs={'class':'form-control mb-2', 'id':'contact', 'placeholder':'Tell us something...'}))
+    class Meta:
+        model = Complaints
+        fields = ['text']
