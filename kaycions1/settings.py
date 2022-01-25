@@ -29,7 +29,7 @@ SECRET_KEY = 'qhgef*-7ix3$y33dr6x^&pp$n9=9s^wa5kvw3&vjtq_cyg2x)9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['kaycions.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['kaycions.herokuapp.com', '127.0.0.1']
 
 AUTH_USER_MODEL = 'task.User'
 
