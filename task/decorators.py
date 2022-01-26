@@ -1,9 +1,11 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect
+import sweetify
 
 def unauthenticated_user(view_func):
     def wrapper_func(request, *args, **kwargs):
         if request.user.is_authenticated:
+            sweetify.warning(request, title='Warning', text='You have to log out first to access that page', icon='warning', button='Ok')
             return redirect('dashboard')
         else:
             return view_func(request, *args, **kwargs)
@@ -21,7 +23,7 @@ def allowed_users(allowed_roles=[]):
             if group in allowed_roles:
                 return view_func(request, *args, **kwargs)
             else:
-                return HttpResponse('You are not authorized to view this page')
+                sweetify.warning(request, title='Warning', text='You are not authorized to view that page', icon='warning', button='Ok')
         return wrapper_func
     return decorator
 
@@ -32,6 +34,7 @@ def admin_only(view_func):
             group = request.user.groups.all()[0].name
 
         if group == 'worker':
+            sweetify.warning(request, title='Warning', text='You are not authorized to view that page', icon='warning', button='Ok')
             return redirect('user-page')
 
         if group == 'admin':
