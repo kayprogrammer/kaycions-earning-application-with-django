@@ -91,10 +91,10 @@
                         {% endif %}
                         {% if n.notification_type == 6 %}
                         <tr>
-                            <td class="not-text" onclick="window.location=`{% url 'verify-task-notification' n.id %}`;" colspan="8">
-                                We've verified a formerly disapproved task based on an update of your actions. Your verified earnings has been increased, and your disapproved earnings have been deducted likewise.
+                            <td class="not-text col-4" onclick="window.location=`{% url 'verify-task-notification' n.id %}`;" colspan="8">
+                                We've verified a formerly disapproved task based on an update on your actions. Your verified earnings has been increased, and your disapproved earnings have been deducted likewise.
                             </td>
-                            <td style="vertical-align: middle;" class="col-1 cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
+                            <td style="vertical-align: middle; width:10px;" class="col-1 cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
                         </tr>
                         {% endif %}
                         {% if n.notification_type == 7 %}
