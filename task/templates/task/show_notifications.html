@@ -38,7 +38,7 @@
                                     <td class="not-text" onclick="window.location=`{% url 'new-worker-notification' n.id %}`;" colspan="8">
                                         A new user "{{n.to_worker|capfirst}}" has just registered, Please create new tasks quickly.
                                     </td>
-                                    <td style="vertical-align: middle; width:20px;" class="cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
+                                    <td style="vertical-align: middle; max-width:20px;" class="cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
                                 </tr>
                             {% endif %}
                         {% endif %}
