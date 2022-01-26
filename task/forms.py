@@ -3,7 +3,7 @@ from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.utils.translation import ugettext as _
-
+from django.utils import timezone
 
 from . validators import *
 from . models import *
@@ -41,9 +41,15 @@ class ProfileForm(ModelForm):
         fields = '__all__'
         exclude = ['user', 'email', 'date_created', 'recommended_by', 'updated', 'code']
 
+def date():
+    return timezone.now() + timedelta(days=2)
+
+def time():
+    return timezone.now() + timedelta(hours=49)
+
 class TaskForm(ModelForm):
-    task_expiry_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type':'date'}))
-    task_expiry_time = forms.TimeField(required=False, widget=forms.TimeInput(attrs={'type':'time'}))
+    task_expiry_date = forms.DateField(initial = date(), required=False, widget=forms.DateInput(attrs={'type':'date'}))
+    task_expiry_time = forms.TimeField(initial = time(), required=False, widget=forms.TimeInput(attrs={'type':'time'}))
 
     class Meta:
         model = Task
