@@ -773,11 +773,12 @@ class RemoveNotification(LoginRequiredMixin, View):
 
 class MarkReadView(LoginRequiredMixin, View):
     def delete(self, request, *args, **kwargs):
-        try:
-            notifications = Notification.objects.filter(to_worker=request.user.worker).exclude(worker_has_seen=True)
-        except:
+        if request.user.is_staff:
             notifications = Notification.objects.filter(admin=request.user.worker).exclude(worker_has_seen=True)
-        notifications.update(worker_has_seen=True)
+            notifications.update(worker_has_seen=True)
+        else:
+            notifications = Notification.objects.filter(to_worker=request.user.worker).exclude(worker_has_seen=True)
+            notifications.update(worker_has_seen=True)
         
         return HttpResponse('Success', content_type='text/plain')
 
