@@ -27,7 +27,7 @@
 	        <ul class="list-unstyled components mb-5">
               {% url 'dashboard' as dashboard_url %}
 	          <li {% if request.path == dashboard_url %}class="active"{% endif %}>
-	            <a href="{% url 'dashboard' %}" >Dashboard</a>
+	            <a href="{% if user.is_staff %}{% url 'dashboard' %}{% else %}{% url 'user-page' %}{% endif %}" >Dashboard</a>
 	          </li>
 	          {% url 'profile' as profile_url %}
             <li {% if request.path == profile_url %}class="active"{% endif %}>
