@@ -5,19 +5,19 @@
         <i class="fas fa-bell fa-2x" style="font-size: 35px; color: #ffc107;"></i>
         <span class="sr-only">Toggle Menu</span>
         {% if nc != 0 %}
-	    <span class="badge bg-primary not-total">{{nc}}</span>
-	{% endif %}
+			<span class="badge bg-primary not-total">{{nc}}</span>
+		{% endif %}
 	</span>
 
     <ul class="dropdown-menu dropdown-menu-right" style=" margin-top: 1em; background-color: #35424a;">
     
         <li class="head text-light">
             <div class="row">
-		<div class="col-lg-12 col-sm-12 col-12 not-head" style="padding-bottom: 6px;">
-		    <span class="">Notifications ({{nc}})</span>
-		    <a style="float: right; cursor: pointer;" {% if nc != 0 %} onclick="removeAllNotification(`{% url 'mark_read' %}`, `{{ request.path }}`)"{% endif %} class="text-light">Mark all as read</a>
-		</div>
-	    </div>
+				<div class="col-lg-12 col-sm-12 col-12 not-head" style="padding-bottom: 6px;">
+					<span class="">Notifications ({{nc}})</span>
+					<a style="float: right; cursor: pointer;" {% if nc != 0 %} onclick="removeAllNotification(`{% url 'mark_read' %}`, `{{ request.path }}`)"{% endif %} class="text-light">Mark all as read</a>
+				</div>
+			</div>
         </li>
 
         <li class="notification-box" style="width: 100%;">
@@ -27,15 +27,15 @@
                         {% if n.notification_type == 1 %}
                             {% if n.to_worker and not n.admin %}
                                 <tr>
-                                    <td class="not-text" onclick="window.location=`{% url 'welcome-notification' n.id %}`;" colspan="8">
+                                    <td class="not-text" onclick="window.location=`{% url 'welcome-notification' n.id %}`;">
                                         Welcome {{n.to_worker|capfirst}}, Please do well to read our <a style="color:blue;" href="{% url 'terms' %}">Terms and Conditions</a> to fully understand how this works. Also update your profile in the profile page. Thank you
                                     </td>
-                                    <td style="vertical-align: middle;" class="col-1 cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
+                                    <td style="vertical-align: middle;" class="cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
                                 </tr>
                             {% endif %}
                             {% if n.to_worker and n.admin %}
                                 <tr>
-                                    <td class="not-text" onclick="window.location=`{% url 'new-worker-notification' n.id %}`;" colspan="8">
+                                    <td class="not-text" onclick="window.location=`{% url 'new-worker-notification' n.id %}`;">
                                         A new user "{{n.to_worker|capfirst}}" has just registered, Please create new tasks quickly.
                                     </td>
                                     <td style="vertical-align: middle;" class="cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
@@ -44,96 +44,96 @@
                         {% endif %}
                         {% if n.notification_type == 11 %}
                         <tr>
-                            <td onclick="window.location=`{% url 'referral-notification' n.id %}`;" class="not-text" colspan="8">
+                            <td onclick="window.location=`{% url 'referral-notification' n.id %}`;" class="not-text">
                                 A new user just signed up using your referral link. $5.00 has been added to your verified earnings
                             </td>
-                            <td style="vertical-align: middle;" class="col-1 cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
+                            <td style="vertical-align: middle;" class="cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
                         </tr>
                         {% endif %}
                         {% if n.notification_type == 2 %}
                         <tr>
-                            <td onclick="window.location=`{% url 'new-task-notification' n.id %}`;" class="not-text" colspan="8">
+                            <td onclick="window.location=`{% url 'new-task-notification' n.id %}`;" class="not-text">
                                 A new task has been added to your dashboard. Check it out and make sure you perform admirably
                             </td>
-                            <td style="vertical-align: middle;" class="col-1 cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
+                            <td style="vertical-align: middle;" class="cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
                         </tr>
                         {% endif %}
                         {% if n.notification_type == 3 %}
                         <tr>
-                            <td onclick="window.location=`{% url 'update-task-notification' n.id %}`;" class="not-text" data-url="#" colspan="8">
+                            <td onclick="window.location=`{% url 'update-task-notification' n.id %}`;" class="not-text">
                                 We made an update to a particular task. Please check it out, and update your actions if neccessary.
                             </td>
-                            <td style="vertical-align: middle;" class="col-1 cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
+                            <td style="vertical-align: middle;" class="cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
                         </tr>
                         {% endif %}
                         {% if n.notification_type == 4 %}
                         <tr>
                             {% if n.to_worker %}
-                            <td class="not-text" onclick="window.location=`{% url 'attempt-task-notification' n.id %}`;" colspan="8">
+                            <td class="not-text" onclick="window.location=`{% url 'attempt-task-notification' n.id %}`;">
                                 You've attempted a task. We're currently checking it, it will verified or disapproved soon, depending on your performance.
                             </td>
-                            <td style="vertical-align: middle;" class="col-1 cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
+                            <td style="vertical-align: middle;" class="cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
                             {% elif n.admin %}
-                            <td class="not-text" onclick="window.location=`{% url 'pending-task-admin-notification' n.id %}`;" colspan="8">
+                            <td class="not-text" onclick="window.location=`{% url 'pending-task-admin-notification' n.id %}`;">
                                 {{n.task.worker|capfirst}} attempted a task. Confirm performance and verify or disapprove.
                             </td>
-                            <td style="vertical-align: middle;" class="col-1 cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
+                            <td style="vertical-align: middle;" class="cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
                             {% endif %}
                         </tr>
                         {% endif %}
                         {% if n.notification_type == 5 %}
                         <tr>
-                            <td class="not-text" onclick="window.location=`{% url 'verify-task-notification' n.id %}`;" colspan="8">
+                            <td class="not-text" onclick="window.location=`{% url 'verify-task-notification' n.id %}`;">
                                 One of your pending tasks has been approved, likewise your verified earnings has increased.
                             </td>
-                            <td style="vertical-align: middle;" class="col-1 cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
+                            <td style="vertical-align: middle;" class="cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
                         </tr>
                         {% endif %}
                         {% if n.notification_type == 6 %}
                         <tr>
                             <td class="not-text" onclick="window.location=`{% url 'verify-task-notification' n.id %}`;">
-                                We've verified a formerly disapproved task based on an update on your actions. Your verified earnings has been increased, and your disapproved earnings have been deducted likewise.
+                                We've verified a formerly disapproved task based on an update of your actions. Your verified earnings has been increased, and your disapproved earnings have been deducted likewise.
                             </td>
                             <td style="vertical-align: middle;" class="cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
                         </tr>
                         {% endif %}
                         {% if n.notification_type == 7 %}
                         <tr>
-                            <td class="not-text" onclick="window.location=`{% url 'disapprove-task-notification' n.id %}`;" colspan="8">
+                            <td class="not-text" onclick="window.location=`{% url 'disapprove-task-notification' n.id %}`;">
                                 One of your pending tasks was disapproved. Seems you didn't follow instructions carefully.
                             </td>
-                            <td style="vertical-align: middle;" class="col-1 cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
+                            <td style="vertical-align: middle;" class="cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
                         </tr>
                         {% endif %}
                         {% if n.notification_type == 8 %}
                         <tr>
-                            <td class="not-text" onclick="window.location=`{% url 'disapprove-task-notification' n.id %}`;" colspan="8">
+                            <td class="not-text" onclick="window.location=`{% url 'disapprove-task-notification' n.id %}`;">
                                 One of your verified tasks has been disapproved. Seems like you updated your actions in the wrong direction.
                             </td>
-                            <td style="vertical-align: middle;" class="col-1 cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
+                            <td style="vertical-align: middle;" class="cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
                         </tr>
                         {% endif %}
                         {% if n.notification_type == 9 %}
                         <tr>
                             {% if n.to_worker %}
-                            <td class="not-text" onclick="window.location=`{% url 'withdrawal-request-notification' n.id %}`;" colspan="8">
+                            <td class="not-text" onclick="window.location=`{% url 'withdrawal-request-notification' n.id %}`;">
                                 We've received your withdrawal request of ${{n.withdrawal.amount_withdraw}}. You'll be paid shortly.
                             </td>
-                            <td style="vertical-align: middle;" class="col-1 cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
+                            <td style="vertical-align: middle;" class="cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
                             {% elif n.admin %}
-                            <td class="not-text" onclick="window.location=`{% url 'withdrawal-request-admin-notification' n.id %}`;" colspan="8">
+                            <td class="not-text" onclick="window.location=`{% url 'withdrawal-request-admin-notification' n.id %}`;">
                                 {{n.withdrawal.worker|capfirst}} made a withdrawal request of ${{n.withdrawal.amount_withdraw}}. Check it out.
                             </td>
-                            <td style="vertical-align: middle;" class="col-1 cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
+                            <td style="vertical-align: middle;" class="cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
                             {% endif %}
                         </tr>
                         {% endif %}
                         {% if n.notification_type == 10 %}
                         <tr>
-                            <td class="not-text" onclick="window.location=`{% url 'withdrawal-earnings-paid-notification' n.id %}`;" colspan="8">
+                            <td class="not-text" onclick="window.location=`{% url 'withdrawal-earnings-paid-notification' n.id %}`;">
                                 Congrats. Your withdrawal of ${{n.withdrawal.amount_withdraw}} was paid sucessfully to your paypal account.
                             </td>
-                            <td style="vertical-align: middle;" class="col-1 cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
+                            <td style="vertical-align: middle;" class="cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
                         </tr>
                         {% endif %}
 
