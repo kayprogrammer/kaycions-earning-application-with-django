@@ -229,9 +229,14 @@ def loginPage(request):
 
         if user is not None:
             if user.is_email_verified:
-                login(request, user)
-                sweetify.success(request, title='Success', text='You\'re now logged in', icon='success', button='Ok', timer=3000)
-                return redirect('dashboard')
+                if user.is_staff:
+                    login(request, user)
+                    sweetify.success(request, title='Success', text='You\'re now logged in', icon='success', button='Ok', timer=3000)
+                    return redirect('dashboard')
+                else:
+                    login(request, user)
+                    sweetify.success(request, title='Success', text='You\'re now logged in', icon='success', button='Ok', timer=3000)
+                    return redirect('user-page')
             else:
                 sweetify.warning(request, title='Warning', text='Email is not verified. Please check your email inbox or spam for verification link', icon='warning', button='Ok', timer=4000)
                 return redirect('login')
