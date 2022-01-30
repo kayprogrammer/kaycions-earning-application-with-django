@@ -2,10 +2,13 @@ from django.db.models import fields
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from django.utils.translation import ugettext as _
 from django.utils import timezone
+today = timezone.now
+from django.utils.translation import ugettext as _
+
 
 from . validators import *
+
 from . models import *
 
 
@@ -43,14 +46,13 @@ class ProfileForm(ModelForm):
 
 def date():
     return timezone.now() + timedelta(days=2)
-
 def time():
     return timezone.now() + timedelta(hours=49)
 
 class TaskForm(ModelForm):
     task_expiry_date = forms.DateField(initial = date(), required=False, widget=forms.DateInput(attrs={'type':'date'}))
-    task_expiry_time = forms.TimeField(initial = time(), required=False, widget=forms.TimeInput(attrs={'type':'time'}))
-
+    task_expiry_time = forms.TimeField(initial=time(), required=False, widget=forms.TimeInput(attrs={'type':'time'}))
+    desription = forms.CharField(initial="Click the \"perform task\" button below to")
     class Meta:
         model = Task
         fields = '__all__'
@@ -69,20 +71,18 @@ class RegisterForm(UserCreationForm):
     password1 = forms.CharField(max_length=25, help_text='Password', widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'Password...', 'id':'passwordfield1'}))
     password2 = forms.CharField(max_length=25, help_text='Password Confirmation', widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'Confirm password...', 'id':'passwordfield2'}))
     terms_confirmed = forms.BooleanField(required=True, widget=forms.CheckboxInput(attrs={'class':'checkbox', }))
+    referral_code = forms.CharField(required=False, validators=[referrer_exist], widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Referral code (optional)...', 'id':'referralcodefield'}))
     class Meta:
         model = User
-        fields = ['full_name', 'email', 'password1', 'password2']
+        fields = ['full_name', 'email', 'password1', 'password2', 'referral_code', 'terms_confirmed']
 
-    '''
-    def __init__(self, *args, **kwargs):
+    
+    def __init__(self, request, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
-        for field_name, field in self.fields.items():
-            field.required = True
-        # Our previous definition was till this line
-
-        password_field = self.fields['password1']
-        password_field.validators.append(MinLengthValidator(limit_value=8))
-    '''
+        if not request.path == "/register/":
+            current_site = request.path
+            code_str = current_site.split("/")[1]
+            self.fields['referral_code'].initial = str(code_str)
 
     def clean_password1(self):
         super(RegisterForm, self).clean()
