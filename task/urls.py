@@ -23,6 +23,7 @@ urlpatterns = [
     path('validate-fullname', csrf_exempt(views.FullnameValidatorView.as_view()), name='validate-fullname'),
     path('validate-email', csrf_exempt(views.EmailValidatorView.as_view()), name='validate-email'),
     path('validate-password', csrf_exempt(views.PasswordValidatorView.as_view()), name='validate-password'),
+    path('validate-refcode', csrf_exempt(views.ReferralcodeValidatorView.as_view()), name='validate-refcode'),
     path('activate-user/<uidb64>/<token>', views.activate_user, name="activate"),
     
     # PASSWORD RESET
