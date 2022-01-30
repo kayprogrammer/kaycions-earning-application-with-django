@@ -78,6 +78,7 @@ class User(AbstractUser):
     terms_confirmed = models.BooleanField(null=False, blank=False, default=True)
     email = models.EmailField(_('email address'), max_length=40, help_text='Email', null=True, unique=True)
     full_name = models.CharField(max_length=40, help_text='Full name', null=True)
+    code = models.CharField(max_length=60, blank=True)
     is_email_verified = models.BooleanField(default=False, null=True, blank=True)
     REQUIRED_FIELDS = []
     objects = CustomUserManager()
