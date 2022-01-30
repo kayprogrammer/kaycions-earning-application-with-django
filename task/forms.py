@@ -50,9 +50,9 @@ def time():
     return timezone.now() + timedelta(hours=49)
 
 class TaskForm(ModelForm):
+    description = forms.CharField(widget=forms.Textarea(), initial="Click the \"perform task\" button below to")
     task_expiry_date = forms.DateField(initial = date(), required=False, widget=forms.DateInput(attrs={'type':'date'}))
     task_expiry_time = forms.TimeField(initial=time(), required=False, widget=forms.TimeInput(attrs={'type':'time'}))
-    desription = forms.CharField(initial="Click the \"perform task\" button below to")
     class Meta:
         model = Task
         fields = '__all__'
