@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('task', '0035_auto_20220125_0024'),
+        ('task', '0002_alter_worker_code'),
     ]
 
     operations = [
