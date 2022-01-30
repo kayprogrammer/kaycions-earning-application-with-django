@@ -1,6 +1,8 @@
+import imp
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.utils.translation import ugettext as _
+from . models import Worker
 '''
 def fullnameValidator(value):
     qwerty = value.split()
@@ -31,3 +33,7 @@ def avatar_size(value):
     if value.size != None:
         if value.size > limit:
             raise ValidationError('File too large. Size should not exceed 2 MiB.')
+
+def referrer_exist(value):
+    if not Worker.objects.filter(code=value).exists():
+        raise ValidationError('Referral code does not exist!')
