@@ -34,6 +34,10 @@
                             {{form.password2}}
                         </div>
                         <div class="errors error4">{{form.password2.errors.as_text|cut:"*"}}</div>
+                        <div class="input-group mt-3">
+                            {{form.referral_code}}
+                        </div>
+                        <div class="errors error5">{{form.referral_code.errors.as_text|cut:"*"}}</div>
                         <div class="d-flex justify-content-center links mt-3">
                             <p style="color: #e8491d;">{{form.terms_confirmed}}
                             I agree to the <a class="linkk" href="{% url 'terms' %}" style="color: #e8491d;">Terms & Conditiions</a></p>
@@ -65,11 +69,13 @@
     const emailfield = document.querySelector('#emailfield');
     const passwordfield1 = document.querySelector('#passwordfield1');
     const passwordfield2 = document.querySelector('#passwordfield2');
+    const refcodefield = document.querySelector('#referralcodefield');
 
     const errorfield = document.querySelector('.error1');
     const errorfield2 = document.querySelector('.error2');
     const errorfield3 = document.querySelector('.error3');
     const errorfield4 = document.querySelector('.error4');
+    const errorfield5 = document.querySelector('.error5');
     const button = document.querySelector('.login_container');
     
     fullnamefield.addEventListener("keyup", (e) => {
@@ -206,6 +212,29 @@
 
     })
     
+    refcodefield.addEventListener("keyup", (e) => {
+
+        const refcodeVal = e.target.value;
+
+        refcodefield.classList.remove("is-invalid");
+        errorfield5.style.display = "none";
+
+        if (refcodeVal.length > 0){
+
+            fetch('/validate-refcode', {
+                body:JSON.stringify({ref_code:refcodeVal}),
+                method: "POST",
+            }).then(res=>res.json()).then(data=>{
+                if(data.ref_code_error){
+                    refcodefield.classList.add("is-invalid");
+                    errorfield5.style.display = "block";
+                    errorfield5.innerHTML = `${data.ref_code_error}`
+                }
+
+            })
+        }
+
+    })
 </script>
 
 {% endblock %}
