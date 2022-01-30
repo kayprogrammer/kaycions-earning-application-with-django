@@ -45,7 +45,7 @@
                         {% if n.notification_type == 11 %}
                         <tr>
                             <td onclick="window.location=`{% url 'referral-notification' n.id %}`;" class="not-text">
-                                A new user just signed up using your referral link. $5.00 has been added to your verified earnings
+                                A new user just signed up using your referral link. $10.00 has been added to your verified earnings
                             </td>
                             <td style="vertical-align: middle;" class="cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
                         </tr>
