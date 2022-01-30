@@ -67,6 +67,15 @@ class PasswordValidatorView(View):
         
         return JsonResponse({'password_valid': True})
 
+class ReferralcodeValidatorView(View):
+    def post(self, request):
+        data = json.loads(request.body)
+        ref_code = data['ref_code']
+
+        if not Worker.objects.filter(code=ref_code).exists():
+            return JsonResponse({'ref_code_error':'Referral code does not exist!'}, status=400)
+        return JsonResponse({'refcode_valid': True})
+    
 @unauthenticated_user
 def home(request):
 
@@ -161,15 +170,13 @@ def send_activation_email(user, request):
 
 @unauthenticated_user
 def registerPage(request):
-    form = RegisterForm()
+    form = RegisterForm(request)
     if request.method == 'POST':
-        form = RegisterForm(request.POST)
+        form = RegisterForm(request, request.POST)
         if form.is_valid():
             user = form.save()
-
             send_activation_email(user, request)
 
-            Earnings.objects.create(worker=user.worker, pending_earnings="0", verified_earnings="0", disapproved_earnings="0", withdrawn_earnings="0", paid_earnings="0")
             sweetify.success(request, title='Account Created', text='We\'ve sent you an email to verify your account', icon='success', button='Ok', timer=4000)
             notification = Notification.objects.create(notification_type = 1, to_worker=user.worker)
             Task.objects.create(worker=user.worker, category="Edit", category_2="Profile", description="Welcome! Click the perform task button to edit your profile", link="/my_profile/", price = "5.00")
@@ -187,28 +194,16 @@ def registerPage(request):
 def registerPage2(request, ref_code):
     referrer = Worker.objects.get(code=ref_code).user
     print(referrer)
-    form = RegisterForm()
+    form = RegisterForm(request)
     if request.method == 'POST':
-        form = RegisterForm(request.POST)
+        form = RegisterForm(request, request.POST)
         if form.is_valid():
             user = form.save()
-
             send_activation_email(user, request)
 
-            Earnings.objects.create(worker=user.worker, pending_earnings="0", verified_earnings="0", disapproved_earnings="0", withdrawn_earnings="0", paid_earnings="0")
             sweetify.success(request, title='Account Created', text='We\'ve sent you an email to verify your account', icon='success', button='Ok', timer=4000)
             notification = Notification.objects.create(notification_type = 1, to_worker=user.worker)
-            if referrer.is_staff:
-                notification3 = Notification.objects.create(notification_type = 11, admin=referrer.worker)
-            else:
-                notification3 = Notification.objects.create(notification_type = 11, to_worker=referrer.worker)
             Task.objects.create(worker=user.worker, category="Edit", category_2="Profile", description="Welcome! Click the perform task button to edit your profile", link="/my_profile/", price = "5.00")
-            user.worker.recommended_by = referrer
-            user.worker.save()
-            earnings = Earnings.objects.get(worker=Worker.objects.get(code=ref_code))
-            verified_earnings = earnings.verified_earnings
-            earnings.verified_earnings = str(verified_earnings + 5)
-            earnings.save() 
             staffs = Worker.objects.filter(user__is_staff=True)
             with transaction.atomic():
                 for staff in staffs:
@@ -262,9 +257,22 @@ def activate_user(request, uidb64, token):
     if user and generate_token.check_token(user, token):
         user.is_email_verified = True
         user.save()
+        if user.worker.recommended_by != None:
+            Earnings.objects.create(worker=user.worker, pending_earnings="0", verified_earnings="10", disapproved_earnings="0", withdrawn_earnings="0", paid_earnings="0")
+        else:
+            Earnings.objects.create(worker=user.worker, pending_earnings="0", verified_earnings="2", disapproved_earnings="0", withdrawn_earnings="0", paid_earnings="0")
 
         sweetify.success(request, title='Success', text='Email verified, You can now log in', icon='success', button='Ok', timer=3000)
-
+        if user.worker.recommended_by != None:
+            referrer = user.worker.recommended_by
+            if referrer.is_staff:
+                notification3 = Notification.objects.create(notification_type = 11, admin=referrer.worker)
+            else:
+                notification3 = Notification.objects.create(notification_type = 11, to_worker=referrer.worker)
+            earnings = Earnings.objects.get(worker=referrer.worker)
+            verified_earnings = earnings.verified_earnings
+            earnings.verified_earnings = str(verified_earnings + 10)
+            earnings.save() 
         return redirect(reverse('login'))
 
     return render(request, 'task/activate_failed.html', {"user": user})
