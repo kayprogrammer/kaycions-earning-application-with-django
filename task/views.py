@@ -178,12 +178,7 @@ def registerPage(request):
             send_activation_email(user, request)
 
             sweetify.success(request, title='Account Created', text='We\'ve sent you an email to verify your account', icon='success', button='Ok', timer=4000)
-            notification = Notification.objects.create(notification_type = 1, to_worker=user.worker)
-            Task.objects.create(worker=user.worker, category="Edit", category_2="Profile", description="Welcome! Click the perform task button to edit your profile", link="/my_profile/", price = "5.00")
-            staffs = Worker.objects.filter(user__is_staff=True)
-            with transaction.atomic():
-                for staff in staffs:
-                    notification2 = Notification.objects.create(notification_type = 1, admin=staff, to_worker=user.worker)
+            
             return redirect('login')
 
     context = {'form':form}
@@ -202,12 +197,7 @@ def registerPage2(request, ref_code):
             send_activation_email(user, request)
 
             sweetify.success(request, title='Account Created', text='We\'ve sent you an email to verify your account', icon='success', button='Ok', timer=4000)
-            notification = Notification.objects.create(notification_type = 1, to_worker=user.worker)
-            Task.objects.create(worker=user.worker, category="Edit", category_2="Profile", description="Welcome! Click the perform task button to edit your profile", link="/my_profile/", price = "5.00")
-            staffs = Worker.objects.filter(user__is_staff=True)
-            with transaction.atomic():
-                for staff in staffs:
-                    notification2 = Notification.objects.create(notification_type = 1, admin=staff, to_worker=user.worker)
+            
             return redirect('login')
 
     context = {'form':form}
@@ -273,6 +263,13 @@ def activate_user(request, uidb64, token):
             verified_earnings = earnings.verified_earnings
             earnings.verified_earnings = str(verified_earnings + 10)
             earnings.save() 
+        
+        notification = Notification.objects.create(notification_type = 1, to_worker=user.worker)
+        Task.objects.create(worker=user.worker, category="Edit", category_2="Profile", description="Welcome! Click the perform task button to edit your profile", link="/my_profile/", price = "5.00")
+        staffs = Worker.objects.filter(user__is_staff=True)
+        with transaction.atomic():
+            for staff in staffs:
+                notification2 = Notification.objects.create(notification_type = 1, admin=staff, to_worker=user.worker)
         return redirect(reverse('login'))
 
     return render(request, 'task/activate_failed.html', {"user": user})
