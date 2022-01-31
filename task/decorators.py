@@ -5,8 +5,12 @@ import sweetify
 def unauthenticated_user(view_func):
     def wrapper_func(request, *args, **kwargs):
         if request.user.is_authenticated:
-            sweetify.warning(request, title='Warning', text='You have to log out first to access that page', icon='warning', button='Ok')
-            return redirect('dashboard')
+            if request.user.is_staff:
+                sweetify.warning(request, title='Warning', text='You have to log out first to access that page', icon='warning', button='Ok')
+                return redirect('dashboard')
+            else:
+                sweetify.warning(request, title='Warning', text='You have to log out first to access that page', icon='warning', button='Ok')
+                return redirect('user-page')
         else:
             return view_func(request, *args, **kwargs)
 
