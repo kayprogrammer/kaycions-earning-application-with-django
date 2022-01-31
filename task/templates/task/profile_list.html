@@ -38,10 +38,39 @@
             </tr>
             <tr>
                 <th scope="row" style="border-right: #dcdcdc solid 1px;">Referral Link</th>
-                <td><a style="color: blue;" href="{% url 'register-ref' worker.code %}">https://{{domain}}{% url 'register-ref' worker.code %}</a></td>
+                <td id="ref-link" style="display: flex; font-style:italic"><i style="cursor: pointer; margin-right: 5px; align-self: center;" onclick="clipboardFunc()" class="fas fa-copy"></i> https://{{domain}}{% url 'register-ref' worker.code %}</td>
+            </tr>
+            <tr>
+                <th scope="row" style="border-right: #dcdcdc solid 1px;">Referral Code</th>
+                <td id="ref-code" style="display: flex; font-style:italic"><i style="cursor: pointer; margin-right: 5px; align-self: center" onclick="clipboardFunc2()" class="fas fa-copy"></i> {{worker.code}}</td>
             </tr>
 
         </tbody>
     </table>
 
 </div>
+
+<script>
+    function clipboardFunc () {
+
+        var text = document.getElementById('ref-link')
+        var range = document.createRange();
+        var selection = window.getSelection();
+        range.selectNodeContents(text);
+        selection.removeAllRanges();
+        selection.addRange(range);
+        document.execCommand("copy")
+    }
+
+    function clipboardFunc2 () {
+
+        var text = document.getElementById('ref-code')
+        var range = document.createRange();
+        var selection = window.getSelection();
+        range.selectNodeContents(text);
+        selection.removeAllRanges();
+        selection.addRange(range);
+        document.execCommand("copy")
+    }
+    
+</script>
