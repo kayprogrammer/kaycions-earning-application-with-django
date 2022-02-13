@@ -29,6 +29,7 @@ from json import dumps as jdumps
 import sweetify
 from . utils import generate_token
 import threading
+from itertools import chain
 
 # Create your views here.
 
@@ -286,12 +287,14 @@ def profile(request):
     withdrawn_earnings = Earnings.objects.get(worker=worker).withdrawn_earnings
     paid_earnings = Earnings.objects.get(worker=worker).paid_earnings
 
-    total_tasks = worker.tasks.count()
-    pending_tasks = worker.tasks.filter(pending=True).order_by('-date_created')
-    verified_tasks = worker.tasks.filter(completed=True).order_by('-date_created')
-    disapproved_tasks = worker.tasks.filter(disapproved=True).order_by('-date_created')
-    unattempted_tasks = worker.tasks.filter(disapproved=False, completed=False, pending=False).order_by('-date_created')
-
+    task_items = worker.taskitems.all().exclude(ignored=True).values('unique_code')
+    tasks = Task.objects.all().exclude(active=False).exclude(unique_code__in=task_items)
+    pending_tasks = worker.taskitems.filter(pending=True).order_by('-date_performed')
+    verified_tasks = worker.taskitems.filter(completed=True).order_by('-date_performed')
+    disapproved_tasks = worker.taskitems.filter(disapproved=True).order_by('-date_performed')
+    unattempted_tasks = Task.objects.all().exclude(active=False).exclude(unique_code__in=task_items).order_by('-date_created')
+    total_tasks = tasks.count() + pending_tasks.count() + verified_tasks.count() + disapproved_tasks.count()
+    
     context = {'domain':get_current_site(request), 'paid_earnings':paid_earnings, 'unattempted_tasks':unattempted_tasks, 'worker':worker, 'earnings_total':earnings_total, 'pending_earnings':pending_earnings, 'verified_earnings':verified_earnings, 'withdrawn_earnings':withdrawn_earnings, 'disapproved_earnings':disapproved_earnings, 'total_tasks': total_tasks, 'verified_tasks':verified_tasks, 'pending_tasks':pending_tasks, 'disapproved_tasks':disapproved_tasks}
     return render(request, 'task/profile.html', context)
 
@@ -422,14 +425,14 @@ def terms(request):
 @admin_only
 def dashboard(request):
 
-    tasks = Task.objects.all().order_by('-date_created')
+    tasks = Task.objects.all().exclude(active=False).order_by('-date_created')
     workers = Worker.objects.all().order_by('-date_created')[:15]
 
     total_tasks = tasks.count()
-    verified_tasks = Task.objects.filter(completed=True)
-    pending_tasks = Task.objects.filter(pending=True)[:15]
-    disapproved_tasks = Task.objects.filter(disapproved=True)
-    unattempted_tasks = Task.objects.filter(disapproved=False, completed=False, pending=False)
+    verified_tasks = TaskItem.objects.filter(completed=True).exclude(ignored=True)
+    pending_tasks = TaskItem.objects.filter(pending=True).exclude(ignored=True)[:15]
+    disapproved_tasks = TaskItem.objects.filter(disapproved=True).exclude(ignored=True)
+    unattempted_tasks = Task.objects.filter(taskitems__isnull=True).exclude(active=False)
 
     context = {'unattempted_tasks':unattempted_tasks, 'tasks':tasks, 'workers': workers, 'total_tasks':total_tasks, 'verified_tasks':verified_tasks, 'pending_tasks':pending_tasks, 'disapproved_tasks':disapproved_tasks}
     return render(request, 'task/dashboard.html', context)
@@ -444,12 +447,12 @@ def workers(request):
 def worker(request, pk_test):
     worker = Worker.objects.get(id=pk_test)
 
-    tasks = worker.tasks.all()
-    total_tasks = tasks.count()
-    pending_tasks = worker.tasks.filter(pending=True).order_by('-date_created')
-    verified_tasks = worker.tasks.filter(completed=True)
-    disapproved_tasks = worker.tasks.filter(disapproved=True)
-    unattempted_tasks = worker.tasks.filter(disapproved=False, completed=False, pending=False)
+    pending_tasks = worker.taskitems.filter(pending=True)
+    verified_tasks = worker.taskitems.filter(completed=True).exclude(ignored=True)
+    disapproved_tasks = worker.taskitems.filter(disapproved=True).exclude(ignored=True)
+    task_items = worker.taskitems.all().exclude(ignored=True).values('unique_code')
+    task_items2 = worker.taskitems.filter(pending=True).exclude(ignored=True)
+    unattempted_tasks = Task.objects.filter(active=True).exclude(unique_code__in=task_items).order_by('-date_created')
 
     earnings_total = Earnings.objects.get(worker=worker).get_total_earnings
     pending_earnings = Earnings.objects.get(worker=worker).pending_earnings
@@ -457,11 +460,10 @@ def worker(request, pk_test):
     disapproved_earnings = Earnings.objects.get(worker=worker).disapproved_earnings
     withdrawn_earnings = Earnings.objects.get(worker=worker).withdrawn_earnings
     paid_earnings = Earnings.objects.get(worker=worker).paid_earnings
+    total_tasks = unattempted_tasks.count() + pending_tasks.count() + verified_tasks.count() + disapproved_tasks.count()
 
-
-    context = {'domain':get_current_site(request), 'paid_earnings':paid_earnings, 'unattempted_tasks':unattempted_tasks, 'total_tasks':total_tasks, 'worker':worker, 'tasks': tasks, 'pending_tasks':pending_tasks, 'disapproved_tasks':disapproved_tasks, 'verified_tasks':verified_tasks, 'earnings_total':earnings_total, 'pending_earnings':pending_earnings, 'verified_earnings':verified_earnings, 'withdrawn_earnings':withdrawn_earnings, 'disapproved_earnings':disapproved_earnings}
+    context = {'total_tasks':total_tasks, 'task_items':task_items2, 'domain':get_current_site(request), 'paid_earnings':paid_earnings, 'unattempted_tasks':unattempted_tasks, 'worker':worker, 'pending_tasks':pending_tasks, 'disapproved_tasks':disapproved_tasks, 'verified_tasks':verified_tasks, 'earnings_total':earnings_total, 'pending_earnings':pending_earnings, 'verified_earnings':verified_earnings, 'withdrawn_earnings':withdrawn_earnings, 'disapproved_earnings':disapproved_earnings}
     return render(request, 'task/workers_id.html', context)
-
 @admin_only
 def tasks(request):
 
@@ -472,24 +474,25 @@ def tasks(request):
 
 @admin_only
 def pending_tasks(request):
-    tasks = Task.objects.filter(pending=True).order_by('-date_created')
+    tasks = TaskItem.objects.filter(pending=True).exclude(ignored=True).order_by('-date_performed')
     context = {'tasks':tasks}
     return render(request, 'task/pending_tasks.html', context)
 
 @admin_only
 def verified_tasks(request):
-    tasks = Task.objects.filter(completed=True).order_by('-date_created')
+    tasks = TaskItem.objects.filter(completed=True).exclude(ignored=True).order_by('-date_performed')
     context = {'tasks':tasks}
     return render(request, 'task/verified_tasks.html', context)
 
 @admin_only
 def disapproved_tasks(request):
-    tasks = Task.objects.filter(disapproved=True).order_by('-date_created')
+    tasks = TaskItem.objects.filter(disapproved=True).exclude(ignored=True).order_by('-date_performed')
     context = {'tasks':tasks}
     return render(request, 'task/disapproved_tasks.html', context)
 #-----------------------------
 
 #TASK CRUD
+@admin_only
 def save_task_form(request, form, template_name):
     data = dict()
     if request.method == 'POST':
@@ -508,22 +511,22 @@ def save_task_form(request, form, template_name):
         
             print(request.path)
             if request.path == "/create_task/":
+                task = Task.objects.create(category=category, category_2=category_2, description=description, price=price, link=link, task_expiry_date=task_expiry_date, task_expiry_time=task_expiry_time)
+                task.save()
                 with transaction.atomic():
                     for worker in workers:
-                        task = Task.objects.create(worker=worker, category=category, category_2=category_2, description=description, price=price, link=link, task_expiry_date=task_expiry_date, task_expiry_time=task_expiry_time)
-                        task.save()
-                        notification = Notification.objects.create(notification_type = 2, to_worker=worker, task=task)
+                        notification = Notification.objects.create(notification_type = 2, to_worker=worker)
             else:
-                task_obj = Task.objects.get(id=form.instance.pk)
-                tasks = Task.objects.filter(task_expiry_time=task_obj.task_expiry_time, task_expiry_date=task_obj.task_expiry_date, link=task_obj.link)
-                task = tasks.update(category=category, category_2=category_2, description=description, price=price, link=link, task_expiry_date=task_expiry_date, task_expiry_time=task_expiry_time, who_updated=request.user.full_name)
+                task_obj = Task.objects.filter(id=form.pk)
+                task = task_obj.update(category=category, category_2=category_2, description=description, price=price, link=link, task_expiry_date=task_expiry_date, task_expiry_time=task_expiry_time, who_updated=request.user.full_name)
                 with transaction.atomic():
                     for worker in workers:
-                        task_object = worker.tasks.filter(task_expiry_time=task_obj.task_expiry_time, task_expiry_date=task_obj.task_expiry_date, link=task_obj.link)
-                        task_object2 = worker.tasks.get(task_expiry_time=task_obj.task_expiry_time, task_expiry_date=task_obj.task_expiry_date, link=task_obj.link)
-                        if task_object.exists():
-                            if task_object2.pending == True:
-                                notification = Notification.objects.create(notification_type = 3, to_worker=worker, task=task_object2)
+                        try:
+                            task_object = worker.taskitems.get(unique_code=task_obj.unique_code).exclude(ignored=True)
+                            if task_object.pending == True:
+                                notification = Notification.objects.create(notification_type = 3, to_worker=worker, task=task_object)
+                        except:
+                            pass
             data['form_is_valid'] = True
             tasks = Task.objects.all().order_by('-date_created')
             data['html_task_list'] = render_to_string('task/partial_task_list.html', {
@@ -578,8 +581,9 @@ def deleteTask(request, pk):
 @csrf_exempt
 @admin_only
 def verify_task(request, task_pk):
+
     try:
-        task = Task.objects.filter(pending=True).get(id=task_pk)
+        task = TaskItem.objects.filter(pending=True).get(id=task_pk)
         task.completed = True
         task.pending = False
         task.disapproved = False
@@ -587,12 +591,12 @@ def verify_task(request, task_pk):
         verified_earnings = Earnings.objects.get(worker=task.worker).verified_earnings
         pending_earnings = Earnings.objects.get(worker=task.worker).pending_earnings
         earning = Earnings.objects.get(worker=task.worker)
-        earning.verified_earnings = verified_earnings + task.price
-        earning.pending_earnings = pending_earnings - task.price
+        earning.verified_earnings = verified_earnings + task.task.price
+        earning.pending_earnings = pending_earnings - task.task.price
         earning.save()
         notification = Notification.objects.create(notification_type = 5, to_worker=task.worker, task=task, earning=earning)
     except:
-        task = Task.objects.filter(disapproved=True).get(id=task_pk)
+        task = TaskItem.objects.filter(disapproved=True).get(id=task_pk)
         task.completed = True
         task.pending = False
         task.disapproved = False
@@ -600,18 +604,17 @@ def verify_task(request, task_pk):
         verified_earnings = Earnings.objects.get(worker=task.worker).verified_earnings
         disapproved_earnings = Earnings.objects.get(worker=task.worker).disapproved_earnings
         earning = Earnings.objects.get(worker=task.worker)
-        earning.verified_earnings = verified_earnings + task.price 
-        earning.disapproved_earnings = disapproved_earnings - task.price
+        earning.verified_earnings = verified_earnings + task.task.price 
+        earning.disapproved_earnings = disapproved_earnings - task.task.price
         earning.save()
         notification = Notification.objects.create(notification_type = 6, to_worker=task.worker, task=task, earning=earning)
-
     return redirect(request.META['HTTP_REFERER'])
 
 @csrf_exempt
 @admin_only
 def disapprove_task(request, task_pk):
     try:
-        task = Task.objects.filter(pending=True).get(id=task_pk)
+        task = TaskItem.objects.filter(pending=True).get(id=task_pk)
         task.completed = False
         task.pending = False
         task.disapproved = True
@@ -619,12 +622,12 @@ def disapprove_task(request, task_pk):
         pending_earnings = Earnings.objects.get(worker=task.worker).pending_earnings
         disapproved_earnings = Earnings.objects.get(worker=task.worker).disapproved_earnings
         earning = Earnings.objects.get(worker=task.worker)
-        earning.disapproved_earnings = disapproved_earnings + task.price
-        earning.pending_earnings = pending_earnings - task.price
+        earning.disapproved_earnings = disapproved_earnings + task.task.price
+        earning.pending_earnings = pending_earnings - task.task.price
         earning.save()
         notification = Notification.objects.create(notification_type = 7, to_worker=task.worker, task=task, earning=earning)
     except:
-        task = Task.objects.filter(completed=True).get(id=task_pk)
+        task = TaskItem.objects.filter(completed=True).get(id=task_pk)
         task.completed = False
         task.pending = False
         task.disapproved = True
@@ -632,8 +635,8 @@ def disapprove_task(request, task_pk):
         verified_earnings = Earnings.objects.get(worker=task.worker).verified_earnings
         disapproved_earnings = Earnings.objects.get(worker=task.worker).disapproved_earnings
         earning = Earnings.objects.get(worker=task.worker)
-        earning.disapproved_earnings = disapproved_earnings + task.price
-        earning.verified_earnings = verified_earnings - task.price
+        earning.disapproved_earnings = disapproved_earnings + task.task.price
+        earning.verified_earnings = verified_earnings - task.task.price
         earning.save()
         notification = Notification.objects.create(notification_type = 8, to_worker=task.worker, task=task, earning=earning)
 
@@ -689,43 +692,45 @@ def approvewithdrawalrequests(request, withdrawal_pk):
 #DASHBOARD AND TASKS LISTS
 @login_required(login_url='login')
 def userPage(request):
-
-    tasks = request.user.worker.tasks.all().order_by('-updated')[:12]
-
-    total_tasks = tasks.count()
-
-    verified_tasks = request.user.worker.tasks.filter(completed=True).order_by('-date_created')
-    pending_tasks = request.user.worker.tasks.filter(pending=True).order_by('-date_created')
-    disapproved_tasks = request.user.worker.tasks.filter(disapproved=True).order_by('-date_created')
-    unattempted_tasks = request.user.worker.tasks.filter(disapproved=False, completed=False, pending=False).order_by('-date_created')
-
-    context = {'unattempted_tasks':unattempted_tasks, 'tasks':tasks, 'total_tasks': total_tasks, 'verified_tasks':verified_tasks, 'pending_tasks':pending_tasks, 'disapproved_tasks':disapproved_tasks }
+    task_items = request.user.worker.taskitems.all().values('unique_code')
+    profile_task = Task.objects.filter(active=True, category_2='Profile').exclude(unique_code__in=task_items)
+    all_tasks = Task.objects.filter(active=True).exclude(unique_code__in=task_items).exclude(category_2='Profile').order_by('-updated')
+    tasks = chain(profile_task, all_tasks)
+    verified_tasks = request.user.worker.taskitems.filter(completed=True).order_by('-date_performed')
+    pending_tasks = request.user.worker.taskitems.filter(pending=True).order_by('-date_performed')
+    disapproved_tasks = request.user.worker.taskitems.filter(disapproved=True).order_by('-date_performed')
+    unattempted_tasks = Task.objects.filter(active=True).exclude(unique_code__in=task_items).order_by('-date_created')
+    total_tasks = all_tasks.count() + profile_task.count() + pending_tasks.count() + verified_tasks.count() + disapproved_tasks.count()
+    new_tasks = all_tasks.count() + profile_task.count()
+    context = {'new_tasks':new_tasks, 'unattempted_tasks':unattempted_tasks, 'tasks':tasks, 'total_tasks': total_tasks, 'verified_tasks':verified_tasks, 'pending_tasks':pending_tasks, 'disapproved_tasks':disapproved_tasks }
     return render(request, 'task/userpage.html', context)
 
 def unattemptedtask(request):
+    task_items = request.user.worker.taskitems.all().exclude(ignored=True).values('unique_code')
     worker = request.user.worker
-    unattemptedtasks = worker.tasks.filter(pending=False, completed=False, disapproved=False)
-
+    profile_task = Task.objects.filter(active=True, category_2='Profile').exclude(unique_code__in=task_items)
+    tasks = Task.objects.filter(active=True).exclude(unique_code__in=task_items).exclude(category_2='Profile').order_by('-date_created')
+    unattemptedtasks = chain(profile_task, tasks)
     context = {'unattempted_tasks':unattemptedtasks}
     return render(request, 'task/unattemptedtasks.html', context)
 
 def worker_pending_tasks(request):
     worker = request.user.worker
-    worker_pending_tasks = worker.tasks.filter(pending=True).order_by('-updated')
+    worker_pending_tasks = worker.taskitems.filter(pending=True).order_by('-date_performed')
 
     context = {'worker_pending_tasks':worker_pending_tasks}
     return render(request, 'task/worker_pending_tasks.html', context)
 
 def worker_verified_tasks(request):
     worker = request.user.worker
-    worker_verified_tasks = worker.tasks.filter(completed=True).order_by('-updated')
+    worker_verified_tasks = worker.taskitems.filter(completed=True).order_by('-date_performed')
 
     context = {'worker_verified_tasks':worker_verified_tasks}
     return render(request, 'task/worker_verified_tasks.html', context)
 
 def worker_disapproved_tasks(request):
     worker = request.user.worker
-    worker_disapproved_tasks = worker.tasks.filter(disapproved=True).order_by('-updated')
+    worker_disapproved_tasks = worker.taskitems.filter(disapproved=True).order_by('-date_performed')
 
     context = {'worker_disapproved_tasks':worker_disapproved_tasks}
     return render(request, 'task/worker_disapproved_tasks.html', context)
@@ -734,33 +739,32 @@ def worker_disapproved_tasks(request):
 #TASKS STATUS UPDATE
 @login_required(login_url='login')
 def deleteYourTask(request, pk):
-    task = Task.objects.filter(worker=request.user.worker).get(id=pk)
+    task_items = request.user.worker.taskitems.all().exclude(ignored=True).values('unique_code')
+    task = Task.objects.exclude(unique_code__in=task_items).exclude(active=False).get(id=pk)
 
-    task.delete()
+    TaskItem.objects.create(task=task, worker=request.user.worker, pending=False, ignored=True, unique_code=task.unique_code)
+
     sweetify.success(request, title='Done', text='Task has been ignored', icon='success', button='Ok', timer=3000)
     return redirect(request.META['HTTP_REFERER'])
 
 @login_required(login_url='login')
 def attemptTask(request, pk):
-    task = Task.objects.filter(worker=request.user.worker).get(id=pk)
+    task_items = request.user.worker.taskitems.all().exclude(ignored=True).values('unique_code')
+    task = Task.objects.exclude(unique_code__in=task_items).get(id=pk)
     pending_earnings = Earnings.objects.get(worker=request.user.worker).pending_earnings
     staffs = Worker.objects.filter(user__is_staff=True)
     if request.method == 'POST':
-        task = Task.objects.filter(worker=request.user.worker).get(id=pk)
-        if task.pending != True:
-            task.pending = True
-            task.verified = False
-            task.disapproved = False
-            task.save()
-            earning = Earnings.objects.get(worker=request.user.worker)
-            earning.pending_earnings = pending_earnings + task.price
-            earning.save()
-            notification = Notification.objects.create(notification_type = 4, to_worker=task.worker, task=task, earning=earning)
-            with transaction.atomic():
-                for staff in staffs:
-                    notification2 = Notification.objects.create(notification_type = 4, admin=staff, task=task, earning=earning)
+        task = Task.objects.exclude(unique_code__in=task_items).exclude(active=False).get(id=pk)
+        task_item = TaskItem.objects.create(task=task, worker=request.user.worker, ignored=False, unique_code=task.unique_code, pending=True, completed=False, disapproved=False)
+        earning = Earnings.objects.get(worker=request.user.worker)
+        earning.pending_earnings = pending_earnings + task.price
+        earning.save()
+        notification = Notification.objects.create(notification_type = 4, to_worker=task.worker, task=task_item, earning=earning)
+        with transaction.atomic():
+            for staff in staffs:
+                notification2 = Notification.objects.create(notification_type = 4, admin=staff, task=task_item, earning=earning)
 
-    return JsonResponse({'pending':task.pending})
+    return JsonResponse({'pending':task_item.pending})
 #----------------------------------------------------------------------------------------------
 
 #---------------------------------------------------------------------------------------------------
