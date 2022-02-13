@@ -50,13 +50,15 @@ def time():
     return timezone.now() + timedelta(hours=49)
 
 class TaskForm(ModelForm):
-    description = forms.CharField(widget=forms.Textarea(), initial="Click the \"perform task\" button below to")
     task_expiry_date = forms.DateField(initial = date(), required=False, widget=forms.DateInput(attrs={'type':'date'}))
     task_expiry_time = forms.TimeField(initial=time(), required=False, widget=forms.TimeInput(attrs={'type':'time'}))
+    description = forms.CharField(widget=forms.Textarea(), initial="Click the \"perform task\" button below to")
+    link = forms.URLField(initial="https://")
+    price = forms.DecimalField(initial="0.00")
     class Meta:
         model = Task
         fields = '__all__'
-        exclude = ['worker', 'pending', 'completed', 'disapproved']
+        exclude = ['worker']
 
 class WithdrawalForm(ModelForm):
 

@@ -4,12 +4,15 @@ from . models import *
 '''
 MyModels = [User, Contact, Suscribers, Worker, AdminTask]
 '''
+class TaskAdmin(admin.ModelAdmin):
+    readonly_fields = ('unique_code', 'clicked', )
 
 admin.site.register(User)
 admin.site.register(Contact)
 admin.site.register(Suscribers)
 admin.site.register(Worker)
-admin.site.register(Task)
+admin.site.register(Task, TaskAdmin)
+admin.site.register(TaskItem, TaskAdmin)
 admin.site.register(Earnings)
 admin.site.register(Withdrawal)
 admin.site.register(Complaints)

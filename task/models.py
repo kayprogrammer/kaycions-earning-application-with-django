@@ -1,3 +1,4 @@
+from audioop import maxpp
 from ctypes import addressof
 import email
 from email.policy import default
@@ -6,12 +7,13 @@ from urllib import request
 from xmlrpc.client import TRANSPORT_ERROR
 from django.db import models
 from django.utils import timezone
+from django.db.models.signals import pre_save
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.base_user import BaseUserManager
 from django.conf import settings
 from datetime import timedelta
-from . utils import generate_ref_code
+from . utils import generate_ref_code, unique_code_generator
 today = timezone.now
 
 def f():
@@ -78,8 +80,8 @@ class User(AbstractUser):
     terms_confirmed = models.BooleanField(null=False, blank=False, default=True)
     email = models.EmailField(_('email address'), max_length=40, help_text='Email', null=True, unique=True)
     full_name = models.CharField(max_length=40, help_text='Full name', null=True)
-    referral_code = models.CharField(max_length=100, null=True, blank=True)
     is_email_verified = models.BooleanField(default=False, null=True, blank=True)
+    referral_code = models.CharField(max_length=100, null=True, blank=True)
     REQUIRED_FIELDS = []
     objects = CustomUserManager()
 
@@ -97,7 +99,7 @@ class Worker(models.Model):
     youtube_id = models.EmailField(max_length=40, help_text='Youtube ID', null=True, unique=True)
     paypal_address = models.EmailField(max_length=100, help_text='Paypal Address', null=True, unique=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
-    code = models.TextField(blank=True)
+    code = models.CharField(max_length=60, blank=True)
     recommended_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='ref_by')
     date_created = models.DateTimeField(default=today)
     updated = models.DateTimeField(auto_now=True)
@@ -156,17 +158,33 @@ class Task(models.Model):
     task_expiry_date = models.DateField(default=f, null=True)
     task_expiry_time = models.TimeField(default=today, null=True)
     worker = models.ForeignKey(Worker, related_name='tasks', on_delete=models.CASCADE, null=True, blank=True)
-    pending = models.BooleanField(default=False, null=True, blank=True)
-    completed = models.BooleanField(default=False, null=True, blank=True)
-    disapproved = models.BooleanField(default=False, null=True, blank=True)
     who_updated = models.CharField(max_length=100, null=True, blank = True)
-
+    clicked = models.IntegerField(default="0", null=True, blank=True, editable=False)
+    unique_code = models.CharField(max_length=30, null=True, blank=True, editable=False)
+    active = models.BooleanField(default=True, null=True, blank=True)
 
     def __str__(self):
         return str(self.category + " " + self.category_2)
 
     class Meta:
         ordering = ['-date_created']
+
+def code_generator(sender, instance, *args, **kwargs):
+    if not instance.unique_code:
+        instance.unique_code = unique_code_generator(instance)
+
+pre_save.connect(code_generator, sender=Task)
+
+class TaskItem(models.Model):
+    task = models.ForeignKey(Task, related_name='taskitems', on_delete=models.CASCADE, null=True, blank=True)
+    date_performed = models.DateTimeField(auto_now_add=True)
+    worker = models.ForeignKey(Worker, related_name='taskitems', on_delete=models.CASCADE, null=True, blank=True)
+    pending = models.BooleanField(default=True, null=True, blank=True)
+    completed = models.BooleanField(default=False, null=True, blank=True)
+    disapproved = models.BooleanField(default=False, null=True, blank=True)
+    ignored = models.BooleanField(default=False, null=True, blank=True)
+    unique_code = models.CharField(max_length=30, null=True, blank=True, editable=False)
+    clicked = models.IntegerField(default="0", null=True, blank=True, editable=False)    
 
 class Earnings(models.Model):
 
@@ -236,7 +254,7 @@ class Notification(models.Model):
     notification_type = models.IntegerField()
     to_worker = models.ForeignKey(Worker, related_name='notification_to', on_delete=models.CASCADE, null=True, blank=True)
     admin = models.ForeignKey(Worker, related_name='notification_to2', on_delete=models.CASCADE, null=True, blank=True)
-    task = models.ForeignKey('Task', on_delete=models.CASCADE, related_name='+', blank=True, null=True)
+    task = models.ForeignKey('TaskItem', on_delete=models.CASCADE, related_name='+', blank=True, null=True)
     earning = models.ForeignKey('Earnings', on_delete=models.CASCADE, related_name='+', blank=True, null=True)
     withdrawal = models.ForeignKey('Withdrawal', on_delete=models.CASCADE, related_name='+', blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)
