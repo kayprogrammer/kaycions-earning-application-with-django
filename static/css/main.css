@@ -193,7 +193,7 @@ footer{
   color:#ffffff;
   background-color:#e8491d;
   text-align: center;
-
+  z-index: 999999;
 }
 
 
