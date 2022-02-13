@@ -8,15 +8,10 @@
     </div>
     <div class="modal-body">
         {% include 'task/task_form.html' %}
-        <div class="row spinner" style="display: none; margin-left: auto; order: 2;">
-            <div class="spinner-border mt-1" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Update task</button>
+        <button type="submit" class="btn btn-primary" id="task-update-submit">Update task</button>
     </div>
 
 </form>

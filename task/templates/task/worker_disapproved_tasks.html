@@ -14,21 +14,21 @@
     {% for t in worker_disapproved_tasks %}
 
         <div class="card border-danger mb-1 mr-1">
-            <div style="align-items: center; background-color: #35424a;" class="card-header border-danger d-flex"><div style="color: white; width: 200px; font-size:15px; font-weight:bold;">{% if t.category == 'Facebook' %}
+            <div style="align-items: center; background-color: #35424a;" class="card-header border-danger d-flex"><div style="color: white; width: 200px; font-size:15px; font-weight:bold;">{% if t.task.category == 'Facebook' %}
                 <i class="fab fa-facebook"></i> 
-            {% elif t.category == 'Twitter' %}
+            {% elif t.task.category == 'Twitter' %}
                 <i class="fab fa-twitter"></i> 
-            {% elif t.category == 'Instagram' %}
+            {% elif t.task.category == 'Instagram' %}
                 <i class="fab fa-instagram"></i> 
-            {% elif t.category == 'Youtube' %}
+            {% elif t.task.category == 'Youtube' %}
                 <i class="fab fa-youtube"></i>                     
-            {% elif t.category == 'Edit' %}
-                {{t.category}}
+            {% else %}
+                <i class="fas fa-pen-square"></i>   
             {% endif %}
-            {{t.category_2}}</div> <div style="color: white; width: 150px; font-size: 13px; text-align: right; font-weight: bold; margin-left: auto; order: 2;">Worth: ${{t.price}}</div></div>
+            {{t.task.category_2}}</div> <div style="color: white; width: 150px; font-size: 13px; text-align: right; font-weight: bold; margin-left: auto; order: 2;">Worth: ${{t.task.price}}</div></div>
             <div class="card-body text-success">
-            <h5 class="card-title" style="font-size: 14px; font-weight: bold;">Expires: {{t.task_expiry_time|time:"h:ia "}}. {{t.task_expiry_date|date:"D M d Y "}}</h5>
-            <p class="card-text" style="font-weight: bold; font-size: 13px;">{{t.description}}</p>
+            <h5 class="card-title" style="font-size: 14px; font-weight: bold;">Expires: {{t.task.task_expiry_time|time:"h:ia "}}. {{t.task.task_expiry_date|date:"D M d Y "}}</h5>
+            <p class="card-text" style="font-weight: bold; font-size: 13px;">{{t.task.description}}</p>
             </div>
             <div class="card-footer border-danger d-flex" style="background-color: #35424a;">
                 <div style="font-weight: bold; align-self: center; font-size: 12px; color: white;">Disapproved <i style="color: red;" class="fas fa-times-circle"></i></div>
@@ -36,7 +36,7 @@
             </div>
         </div>
     {% empty %} 
-    <p style="color: blue; text-align: center;">You have no disapproved tasks!</p>               
+    <p style="color: blue; text-align: right;">You have no disapproved tasks!</p>               
     {% endfor %}
     </div>
 </div>

@@ -70,7 +70,6 @@
                     <tr>
                         <th>Task</th>
                         <th>Date Performed</th>
-                        <th>Status</th>
                         <th>Verify</th>
                         <th>Disapprove</th>
 
@@ -79,9 +78,8 @@
                         <tr>
                             <td>{{t.task}}</td>
                             <td>{{t.date_performed}}</td>
-                            <td>{{t.status}}</td>
-                            <td><a class="btn btn-sm btn-info" href="">Verify</a></td>
-                            <td><a class="btn btn-sm btn-danger" href="">Disapprove</a></td>
+                            <td><a class="btn btn-sm btn-info" href="{% url 'verify_task' t.id %}">Verify</a></td>
+                            <td><a class="btn btn-sm btn-danger" href="{% url 'disapprove_task' t.id %}">Disapprove</a></td>
                         </tr>
                     {% endfor %}
 

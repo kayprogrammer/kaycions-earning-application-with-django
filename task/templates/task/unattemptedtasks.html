@@ -21,7 +21,9 @@
                     {% elif t.category == 'Instagram' %}
                         <i class="fab fa-instagram"></i> 
                     {% elif t.category == 'Youtube' %}
-                        <i class="fab fa-youtube"></i>                     
+                        <i class="fab fa-youtube"></i>  
+                    {% else %}
+                        <i class="fas fa-pen-square"></i>       
                     {% endif %}
                     {{t.category_2}}
                 </div> 
@@ -59,7 +61,7 @@
             </div>
         </div>
     {% empty %} 
-        <p style="color: blue; text-align: center;">There are no new tasks for you! Check later</p>               
+        <p style="color: blue; text-align: right;">There are no new tasks for you! Check later</p>               
     {% endfor %}
     </div>
 </div>

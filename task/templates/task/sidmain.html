@@ -27,7 +27,7 @@
 	        <ul class="list-unstyled components mb-5">
               {% url 'dashboard' as dashboard_url %}
 	          <li {% if request.path == dashboard_url %}class="active"{% endif %}>
-	            <a href="{% if user.is_staff %}{% url 'dashboard' %}{% else %}{% url 'user-page' %}{% endif %}" >Dashboard</a>
+	            <a href="{% url 'dashboard' %}" >Dashboard</a>
 	          </li>
 	          {% url 'profile' as profile_url %}
             <li {% if request.path == profile_url %}class="active"{% endif %}>
@@ -137,7 +137,7 @@
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/side.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
-
+    
     <script type="text/javascript">
 
     //-----------  NOTIFICATIONS JS CODE----------------------------
@@ -279,7 +279,7 @@
               processData: false,
               cache: false,
               beforeSend: function(){
-                $('.spinner').show()
+                $('#update-profile-btn').replaceWith(`<button disabled type="submit" class="btn btn-primary" id="update-profile-btn">Saving...</button>`)
               },
               success: function (data) {
                 
@@ -316,6 +316,133 @@
       
       })
 
+      $(document).ready(function() {
+        var loadForm = function () {
+            var btn = $(this);
+            $.ajax({
+                url: btn.attr("data-url"),
+                type: 'get',
+                dataType: 'json',
+                beforeSend: function (e) {
+                    $("#modal-task .modal-content").html("");
+                    $("#modal-task").modal("show");
+                },
+                success: function (data) {
+
+                    $("#modal-task .modal-content").html(data.html_form);
+                }
+            });
+        };
+
+        var saveForm = function () {
+            var form = $(this);
+            $.ajax({
+              url: form.attr("action"),
+              data: form.serialize(),
+              type: form.attr("method"),
+              dataType: 'json',
+              beforeSend: function(){
+                $('#task-create-submit').replaceWith(`<button disabled type="submit" class="btn btn-primary">Creating...</button>`)
+              },
+              success: function (data) {
+                data.preventDefault;
+                if (data.form_is_valid) {
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Task has been added',
+                    button :'Ok',
+                    timer : 2500
+                  });
+                  $("#task-table").html(data.html_task_list);
+                  $("#modal-task").modal("hide");
+                }
+
+                else {
+                  $("#modal-task .modal-content").html(data.html_form);
+                }
+              }
+            });
+            return false;
+        };
+
+        var updateForm = function () {
+            var form = $(this);
+            $.ajax({
+              url: form.attr("action"),
+              data: form.serialize(),
+              type: form.attr("method"),
+              dataType: 'json',
+              beforeSend: function(){
+                $('#task-update-submit').replaceWith(`<button disabled type="submit" class="btn btn-primary">Updating...</button>`)
+              },
+              success: function (data) {
+                data.preventDefault;
+                if (data.form_is_valid) {
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Task has been updated',
+                    button :'Ok',
+                    timer : 2500
+                  });
+                  $("#task-table").html(data.html_task_list);
+                  $("#modal-task").modal("hide");
+                }
+
+                else {
+                  $("#modal-task .modal-content").html(data.html_form);
+                  
+                }
+              }
+            });
+            return false;
+        };
+
+        var delForm = function () {
+            var form = $(this);
+            $.ajax({
+              url: form.attr("action"),
+              data: form.serialize(),
+              type: form.attr("method"),
+              dataType: 'json',
+              beforeSend: function(){
+                $('#task-delete-submit').replaceWith(`<button disabled type="submit" class="btn btn-primary">Deleting...</button>`)
+              },
+              success: function (data) {
+                data.preventDefault;
+                if (data.form_is_valid) {
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Task has been deleted',
+                    button :'Ok',
+                    timer : 2500
+                  });
+                  $("#task-table").html(data.html_task_list);
+                  $("#modal-task").modal("hide");
+                }
+
+                else {
+                  $("#modal-task .modal-content").html(data.html_form);
+                }
+              }
+            });
+            return false;
+        };
+
+        /* Binding */
+        $(".js-create-task").click(loadForm);
+        $("#modal-task").on("submit", ".js-task-create-form", saveForm);
+
+        // Update task
+        $("#task-table").on("click", ".js-update-task", loadForm);
+        $("#modal-task").on("submit", ".js-task-update-form", updateForm);
+
+        // Delete task
+        $("#task-table").on("click", ".js-delete-task", loadForm);
+        $("#modal-task").on("submit", ".js-task-delete-form", delForm);
+    });
     </script>
 
     {% block javascript %} {% endblock %}

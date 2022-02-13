@@ -11,138 +11,142 @@
     {% include 'task/status.html' %}
     <br>
     <p style="color: orange; font-weight: bold;">Tasks deletes automatically upon expiry!</p>
-    <p style="color: #35424a; font-weight: bold;">Latest Tasks ({{tasks.count}})</p>
+    <p style="color: #35424a; font-weight: bold;">Latest Tasks ({{new_tasks}})</p>
     <div class="row no-gutters table-responsive">
         <div class="card-group user-tasks" >
-        {% for t in tasks %}
-            {% if t.pending == True %}
-                <div class="card border-warning mb-1 mr-1">
-                    <div style="align-items: center; background-color: #35424a;" class="card-header border-warning d-flex"><div style="width: 200px; font-size:15px; font-weight:bold; color: white;">
-                        {% if t.category == 'Facebook' %}
-                            <i class="fab fa-facebook"></i> 
-                        {% elif t.category == 'Twitter' %}
-                            <i class="fab fa-twitter"></i> 
-                        {% elif t.category == 'Instagram' %}
-                            <i class="fab fa-instagram"></i> 
-                        {% elif t.category == 'Youtube' %}
-                            <i class="fab fa-youtube"></i>                     
-                        {% elif t.category == 'Edit' %}
-                            {{t.category}}
-                        {% endif %} 
-                        
-                        {{t.category_2}}</div> <div style="width: 150px; font-size: 13px; text-align: right; color: white; font-weight: bold; margin-left: auto; order: 2;">Worth: ${{t.price}}</div></div>
-                    <div class="card-body text-success">
-                    <h5 class="card-title" style="font-size: 14px; font-weight: bold;">Expires: {{t.task_expiry_time|time:"h:ia "}}. {{t.task_expiry_date|date:"D M d Y "}}</h5>
-                    <p class="card-text" style="font-weight: bold; font-size: 13px;">{{t.description}}</p>
-                    </div>
-                    <div style="background-color: #35424a;" class="card-footer border-warning d-flex">
-                        <div style="font-weight: bold; align-self: center; color: white; font-size: 12px;">Pending Approval <i style="color: yellow;" class="fas fa-dot-circle"></i></div>
-                        <div style="text-align: right; margin-left: auto; order: 2;"><button id="butt" class="btn btn-sm btn-primary" type="click"><a href="{{t.link}}" class="card-link" style="font-weight: bold; font-size:11.5px; color: white;" target="_blank">Check again</a></button></div>
-                    </div>
-                </div>
-            {% else %}
-                {% if t.completed == True %}
-                    <div class="card border-success mb-1 mr-1">
-                        <div style="align-items: center; background-color: #35424a;" class="card-header border-success d-flex"><div style="color: white; width: 200px; font-size:15px; font-weight:bold;">{% if t.category == 'Facebook' %}
-                            <i class="fab fa-facebook"></i> 
+        {% for t in tasks|slice:":12" %}      
+            
+            <div id="card-{{forloop.counter}}" class="card border-primary mb-1 mr-1">
+                <div style="align-items: center; background-color: #35424a;" id="card-header-{{forloop.counter}}" class="card-header border-primary d-flex">
+                    <div style="width: 200px; font-size:15px; font-weight:bold; color: white;">{% if t.category == 'Facebook' %}
+                        <i class="fab fa-facebook"></i> 
                         {% elif t.category == 'Twitter' %}
                             <i class="fab fa-twitter"></i> 
                         {% elif t.category == 'Instagram' %}
                             <i class="fab fa-instagram"></i> 
                         {% elif t.category == 'Youtube' %}
                             <i class="fab fa-youtube"></i>
-                        {% elif t.category == 'Edit' %}
-                            {{t.category}}
+                        {% else %}
+                            <i class="fas fa-pen-square"></i>   
                         {% endif %}
-                        {{t.category_2}}</div> <div style="color: white; width: 150px; font-size: 13px; text-align: right; font-weight: bold; margin-left: auto; order: 2;">Worth: ${{t.price}}</div></div>
-                        <div class="card-body text-success">
-                        <h5 class="card-title" style="font-size: 14px; font-weight: bold;">Expires: {{t.task_expiry_time|time:"h:ia "}}. {{t.task_expiry_date|date:"D M d Y "}}</h5>
-                        <p class="card-text" style="font-weight: bold; font-size: 13px;">{{t.description}}</p>
-                        </div>
-                        <div class="card-footer border-success d-flex" style="background-color: #35424a;">
-                            <div style="font-weight: bold; align-self: center; font-size: 12px; color: white;">Approved <i style="color: lightgreen;" class="fas fa-check-circle"></i></div>
-                            <div style="text-align: right; margin-left: auto; order: 2;"><button style="font-size: 11.5px; font-weight: bold;" disabled id="butt" class="btn btn-sm btn-danger" type="click">Ignore Task</button></div>
-                        </div>
-                    </div>
-                {% else %}
-                    {% if t.disapproved == True %}
-                        <div class="card border-danger mb-1 mr-1">
-                            <div style="align-items: center; background-color: #35424a;" class="card-header border-danger d-flex"><div style="color: white; width: 200px; font-size:15px; font-weight:bold;">{% if t.category == 'Facebook' %}
-                                <i class="fab fa-facebook"></i> 
-                            {% elif t.category == 'Twitter' %}
-                                <i class="fab fa-twitter"></i> 
-                            {% elif t.category == 'Instagram' %}
-                                <i class="fab fa-instagram"></i> 
-                            {% elif t.category == 'Youtube' %}
-                                <i class="fab fa-youtube"></i>
-                            {% elif t.category == 'Edit' %}
-                                {{t.category}}
-                            {% endif %}
-                            {{t.category_2}}</div> <div style="color: white; width: 150px; font-size: 13px; text-align: right; font-weight: bold; margin-left: auto; order: 2;">Worth: ${{t.price}}</div></div>
-                            <div class="card-body text-success">
-                            <h5 class="card-title" style="font-size: 14px; font-weight: bold;">Expires: {{t.task_expiry_time|time:"h:ia "}}. {{t.task_expiry_date|date:"D M d Y "}}</h5>
-                            <p class="card-text" style="font-weight: bold; font-size: 13px;">{{t.description}}</p>
+                        {{t.category_2}}
+                    </div> 
+                    <div style="width: 150px; font-size: 13px; text-align: right; color: white; font-weight: bold; margin-left: auto; order: 2;">Worth: ${{t.price}}</div>
+                </div>
+                <div class="card-body text-success">
+                    <h5 class="card-title" style="font-size: 14px; font-weight: bold;">Expires: {{t.task_expiry_time|time:"h:ia "}}. {{t.task_expiry_date|date:"D M d Y "}}</h5>
+                    <p class="card-text" style="font-weight: bold; font-size: 13px;">{{t.description}}</p>
+                </div>
+                <div id="card-footer-{{forloop.counter}}" style="background-color: #35424a;" class="card-footer border-primary d-flex">
+                    <form method="POST" action="{%  url 'attempttask' t.id %}" class="pending-task-form">
+                        {% csrf_token %}
+                        <div id="perform-task-{{forloop.counter}}"><button data-url="{{t.link}}" id="butt" class="btn btn-md btn-info" type="click" target="_blank" style="font-size: 11px ; font-weight:bold;">Perform Task</button></div>
+                    </form>
+                    <div id="check-{{forloop.counter}}" style="text-align: right; margin-left: auto; order: 2;"><button type="button" data-toggle="modal" data-target="#ignore-task-{{forloop.counter}}" id="butt" class="btn btn-sm btn-danger" type="click" style="font-size: 12px; font-weight: bold;">Ignore Task</button></div>
+                    <div class="modal fade" id="ignore-task-{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Ignore Task</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
-                            <div class="card-footer border-danger d-flex" style="background-color: #35424a;">
-                                <div style="font-weight: bold; align-self: center; font-size: 12px; color: white;">Disapproved <i style="color: red;" class="fas fa-times-circle"></i></div>
-                                <div style="text-align: right; margin-left: auto; order: 2;"><button id="butt" class="btn btn-sm btn-danger" style="font-weight: bold; font-size: 11.5px;" type="click" disabled>Ignore Task</button></div>
+                            <div class="modal-body">
+                                Are you sure you want to ignore this task <strong>"{{t.category}}: {{t.category_2}}"</strong>? You won't see it again!
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <a href="{% url 'delete_your_task' t.id %}" class="btn btn-danger">Ignore</a>
+                            </div>
                             </div>
                         </div>
-                        
-                    {% else %}
-                        <div id="card-{{forloop.counter}}" class="card border-primary mb-1 mr-1">
-                            <div style="align-items: center; background-color: #35424a;" id="card-header-{{forloop.counter}}" class="card-header border-primary d-flex">
-                                <div style="width: 200px; font-size:15px; font-weight:bold; color: white;">{% if t.category == 'Facebook' %}
-                                    <i class="fab fa-facebook"></i> 
-                                    {% elif t.category == 'Twitter' %}
-                                        <i class="fab fa-twitter"></i> 
-                                    {% elif t.category == 'Instagram' %}
-                                        <i class="fab fa-instagram"></i> 
-                                    {% elif t.category == 'Youtube' %}
-                                        <i class="fab fa-youtube"></i>                     
-                                    {% endif %}
-                                    {{t.category_2}}
-                                </div> 
-                                <div style="width: 150px; font-size: 13px; text-align: right; color: white; font-weight: bold; margin-left: auto; order: 2;">Worth: ${{t.price}}</div>
-                            </div>
-                            <div class="card-body text-success">
-                                <h5 class="card-title" style="font-size: 14px; font-weight: bold;">Expires: {{t.task_expiry_time|time:"h:ia "}}. {{t.task_expiry_date|date:"D M d Y "}}</h5>
-                                <p class="card-text" style="font-weight: bold; font-size: 13px;">{{t.description}}</p>
-                            </div>
-                            <div id="card-footer-{{forloop.counter}}" style="background-color: #35424a;" class="card-footer border-primary d-flex">
-                                <form method="POST" action="{%  url 'attempttask' t.id %}" class="pending-task-form">
-                                    {% csrf_token %}
-                                    <div id="perform-task-{{forloop.counter}}"><button data-url="{{t.link}}" id="butt" class="btn btn-md btn-info" type="click" target="_blank" style="font-size: 11px ; font-weight:bold;">Perform Task</button></div>
-                                </form>
-                                <div id="check-{{forloop.counter}}" style="text-align: right; margin-left: auto; order: 2;"><button type="button" data-toggle="modal" data-target="#ignore-task-{{forloop.counter}}" id="butt" class="btn btn-sm btn-danger" type="click" style="font-size: 12px; font-weight: bold;">Ignore Task</button></div>
-                                <div class="modal fade" id="ignore-task-{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                      <div class="modal-content">
-                                        <div class="modal-header">
-                                          <h5 class="modal-title" id="exampleModalLabel">Ignore Task</h5>
-                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                          </button>
-                                        </div>
-                                        <div class="modal-body">
-                                          Are you sure you want to ignore this task <strong>"{{t.category}}: {{t.category_2}}"</strong>? You won't see it again!
-                                        </div>
-                                        <div class="modal-footer">
-                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                          <a href="{% url 'delete_your_task' t.id %}" class="btn btn-danger">Ignore</a>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                            </div>
                         </div>
-                    
-                    {% endif %}
-                {% endif %}
+                </div>
+            </div>
+        
+        {% empty %}
+            {% if request.user.worker.taskitems.all.count == 0 %}
+                <p style="color: blue; text-align: right;">You have no tasks yet. Check later!</p>               
             {% endif %}
-        {% empty %} 
-            <p style="color: blue; text-align: right;">You have no tasks yet. Check later!</p>               
         {% endfor %}
+
+        {% for ti in request.user.worker.taskitems.all %}
+            {% if ti.pending == True %}
+                <div class="card border-warning mb-1 mr-1">
+                    <div style="align-items: center; background-color: #35424a;" class="card-header border-warning d-flex"><div style="width: 200px; font-size:15px; font-weight:bold; color: white;">
+                        {% if ti.task.category == 'Facebook' %}
+                            <i class="fab fa-facebook"></i> 
+                        {% elif ti.task.category == 'Twitter' %}
+                            <i class="fab fa-twitter"></i> 
+                        {% elif ti.task.category == 'Instagram' %}
+                            <i class="fab fa-instagram"></i> 
+                        {% elif ti.task.category == 'Youtube' %}
+                            <i class="fab fa-youtube"></i>                     
+                        {% else %}
+                            Edit
+                        {% endif %} 
+                        
+                        {{ti.task.category_2}}</div> <div style="width: 150px; font-size: 13px; text-align: right; color: white; font-weight: bold; margin-left: auto; order: 2;">Worth: ${{ti.task.price}}</div></div>
+                    <div class="card-body text-success">
+                    <h5 class="card-title" style="font-size: 14px; font-weight: bold;">Expires: {{ti.task.task_expiry_time|time:"h:ia "}}. {{ti.task.task_expiry_date|date:"D M d Y "}}</h5>
+                    <p class="card-text" style="font-weight: bold; font-size: 13px;">{{ti.task.description}}</p>
+                    </div>
+                    <div style="background-color: #35424a;" class="card-footer border-warning d-flex">
+                        <div style="font-weight: bold; align-self: center; color: white; font-size: 12px;">Pending Approval <i style="color: yellow;" class="fas fa-dot-circle"></i></div>
+                        <div style="text-align: right; margin-left: auto; order: 2;"><button id="butt" class="btn btn-sm btn-primary" type="click"><a href="{{ti.task.link}}" class="card-link" style="font-weight: bold; font-size:11.5px; color: white;" target="_blank">Check again</a></button></div>
+                    </div>
+                </div>
+            
+            {% elif ti.completed == True %}
+                <div class="card border-success mb-1 mr-1">
+                    <div style="align-items: center; background-color: #35424a;" class="card-header border-success d-flex"><div style="color: white; width: 200px; font-size:15px; font-weight:bold;">{% if ti.task.category == 'Facebook' %}
+                        <i class="fab fa-facebook"></i> 
+                    {% elif ti.task.category == 'Twitter' %}
+                        <i class="fab fa-twitter"></i> 
+                    {% elif ti.task.category == 'Instagram' %}
+                        <i class="fab fa-instagram"></i> 
+                    {% elif ti.task.category == 'Youtube' %}
+                        <i class="fab fa-youtube"></i>
+                    {% else %}
+                        Edit
+                    {% endif %}
+                    {{ti.task.category_2}}</div> <div style="color: white; width: 150px; font-size: 13px; text-align: right; font-weight: bold; margin-left: auto; order: 2;">Worth: ${{ti.task.price}}</div></div>
+                    <div class="card-body text-success">
+                    <h5 class="card-title" style="font-size: 14px; font-weight: bold;">Expires: {{ti.task.task_expiry_time|time:"h:ia "}}. {{ti.task.task_expiry_date|date:"D M d Y "}}</h5>
+                    <p class="card-text" style="font-weight: bold; font-size: 13px;">{{ti.task.description}}</p>
+                    </div>
+                    <div class="card-footer border-success d-flex" style="background-color: #35424a;">
+                        <div style="font-weight: bold; align-self: center; font-size: 12px; color: white;">Approved <i style="color: lightgreen;" class="fas fa-check-circle"></i></div>
+                        <div style="text-align: right; margin-left: auto; order: 2;"><button style="font-size: 11.5px; font-weight: bold;" disabled id="butt" class="btn btn-sm btn-danger" type="click">Ignore Task</button></div>
+                    </div>
+                </div>
+            
+            {% elif t.disapproved == True %}
+                <div class="card border-danger mb-1 mr-1">
+                    <div style="align-items: center; background-color: #35424a;" class="card-header border-danger d-flex"><div style="color: white; width: 200px; font-size:15px; font-weight:bold;">{% if ti.task.category == 'Facebook' %}
+                        <i class="fab fa-facebook"></i> 
+                    {% elif ti.task.category == 'Twitter' %}
+                        <i class="fab fa-twitter"></i> 
+                    {% elif ti.task.category == 'Instagram' %}
+                        <i class="fab fa-instagram"></i> 
+                    {% elif ti.task.category == 'Youtube' %}
+                        <i class="fab fa-youtube"></i>
+                    {% else %}
+                        Edit
+                    {% endif %}
+                    {{ti.task.category_2}}</div> <div style="color: white; width: 150px; font-size: 13px; text-align: right; font-weight: bold; margin-left: auto; order: 2;">Worth: ${{ti.task.price}}</div></div>
+                    <div class="card-body text-success">
+                    <h5 class="card-title" style="font-size: 14px; font-weight: bold;">Expires: {{ti.task.task_expiry_time|time:"h:ia "}}. {{ti.task.task_expiry_date|date:"D M d Y "}}</h5>
+                    <p class="card-text" style="font-weight: bold; font-size: 13px;">{{ti.task.description}}</p>
+                    </div>
+                    <div class="card-footer border-danger d-flex" style="background-color: #35424a;">
+                        <div style="font-weight: bold; align-self: center; font-size: 12px; color: white;">Disapproved <i style="color: red;" class="fas fa-times-circle"></i></div>
+                        <div style="text-align: right; margin-left: auto; order: 2;"><button id="butt" class="btn btn-sm btn-danger" style="font-weight: bold; font-size: 11.5px;" type="click" disabled>Ignore Task</button></div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}        
 
         </div>
     </div>

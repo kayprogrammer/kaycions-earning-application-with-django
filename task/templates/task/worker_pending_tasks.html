@@ -14,33 +14,33 @@
     {% for t in worker_pending_tasks %}
         <div class="card border-warning mb-1 mr-1" id="pending-task-{{t.id}}">
             <div style="align-items: center; background-color: #35424a;" class="card-header border-warning d-flex"><div style="width: 200px; font-size:15px; font-weight:bold; color: white;">
-                {% if t.category == 'Facebook' %}
+                {% if t.task.category == 'Facebook' %}
                     <i class="fab fa-facebook"></i> 
-                {% elif t.category == 'Twitter' %}
+                {% elif t.task.category == 'Twitter' %}
                     <i class="fab fa-twitter"></i> 
-                {% elif t.category == 'Instagram' %}
+                {% elif t.task.category == 'Instagram' %}
                     <i class="fab fa-instagram"></i> 
-                {% elif t.category == 'Youtube' %}
+                {% elif t.task.category == 'Youtube' %}
                     <i class="fab fa-youtube"></i>                     
-                {% elif t.category == 'Edit' %}
-                    {{t.category}}
+                {% else %}
+                    <i class="fas fa-pen-square"></i>       
                 {% endif %} 
                 
-                {{t.category_2}}</div> <div style="width: 150px; font-size: 13px; text-align: right; color: white; font-weight: bold; margin-left: auto; order: 2;">Worth: ${{t.price}}</div></div>
+                {{t.task.category_2}}</div> <div style="width: 150px; font-size: 13px; text-align: right; color: white; font-weight: bold; margin-left: auto; order: 2;">Worth: ${{t.task.price}}</div></div>
             <div class="card-body text-success">
-            <h5 class="card-title" style="font-size: 14px; font-weight: bold;">Expires: {{t.task_expiry_time|time:"h:ia "}}. {{t.task_expiry_date|date:"D M d Y "}}</h5>
-            <p class="card-text" style="font-weight: bold; font-size: 13px;">{{t.description}}</p>
-            {% if t.who_updated != None %}
+            <h5 class="card-title" style="font-size: 14px; font-weight: bold;">Expires: {{t.task.task_expiry_time|time:"h:ia "}}. {{t.task.task_expiry_date|date:"D M d Y "}}</h5>
+            <p class="card-text" style="font-weight: bold; font-size: 13px;">{{t.task.description}}</p>
+            {% if t.task.who_updated != None %}
                 <p class="card-text" style="color:blue; font-weight: bold; font-size: 13px;">*Updated..</p>
             {% endif %}
             </div>
             <div style="background-color: #35424a;" class="card-footer border-warning d-flex">
                 <div style="font-weight: bold; align-self: center; color: white; font-size: 12px;">Pending Approval <i style="color: yellow;" class="fas fa-dot-circle"></i></div>
-                <div style="text-align: right; margin-left: auto; order: 2;"><button id="butt" class="btn btn-sm btn-primary" type="click"><a href="{{t.link}}" class="card-link" style="font-weight: bold; font-size:11.5px; color: white;" target="_blank">Check again</a></button></div>
+                <div style="text-align: right; margin-left: auto; order: 2;"><button id="butt" class="btn btn-sm btn-primary" type="click"><a href="{{t.task.link}}" class="card-link" style="font-weight: bold; font-size:11.5px; color: white;" target="_blank">Check again</a></button></div>
             </div>
         </div>
     {% empty %} 
-        <p style="color: blue; text-align: center;">You have no pending tasks!</p>               
+        <p style="color: blue; text-align: right;">You have no pending tasks!</p>               
     {% endfor %}
     </div>
 </div>

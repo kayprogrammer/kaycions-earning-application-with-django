@@ -53,10 +53,10 @@
                     
                     {% for t in pending_tasks %}
                     <tr style="font-size:11px;">
-                        <td>{{t.category}} {{t.category_2}}</td>
+                        <td>{{t.task.category}} {{t.task.category_2}}</td>
                         <td><a style="color: blue;" href="{% url 'worker' t.worker.id %}">{{t.worker|capfirst}}</a></td>
-                        <td>{{t.updated}}</td>
-                        <td><button style="font-size: 11px;" class="btn btn-sm btn-success"><a style="color: white;" href="{{t.link}}" target="_blank">Check</a></button></td>
+                        <td>{{t.task.updated}}</td>
+                        <td><button style="font-size: 11px;" class="btn btn-sm btn-success"><a style="color: white;" href="{{t.task.link}}" target="_blank">Check</a></button></td>
                         <td><a style="font-size: 11px;" class="btn btn-sm btn-info" href="{% url 'verify_task' t.id %}">Verify</a></td>
                         <td><a style="font-size: 11px;" class="btn btn-sm btn-danger" href="{% url 'disapprove_task' t.id %}">Disapprove</a></td>
                     </tr>
