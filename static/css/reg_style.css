@@ -55,8 +55,9 @@ body{
 }
 
 footer{
-    min-height: 80px;
-    margin-bottom: auto;
+    position: relative;
+    bottom: -8%;
+    width: 100%;
 }
 
 @media (max-width: 768px) {
