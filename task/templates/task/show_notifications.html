@@ -5,19 +5,19 @@
         <i class="fas fa-bell fa-2x" style="font-size: 35px; color: #ffc107;"></i>
         <span class="sr-only">Toggle Menu</span>
         {% if nc != 0 %}
-			<span class="badge bg-primary not-total">{{nc}}</span>
-		{% endif %}
+		<span class="badge bg-primary not-total">{{nc}}</span>
+	{% endif %}
 	</span>
 
     <ul class="dropdown-menu dropdown-menu-right" style=" margin-top: 1em; background-color: #35424a;">
     
         <li class="head text-light">
             <div class="row">
-				<div class="col-lg-12 col-sm-12 col-12 not-head" style="padding-bottom: 6px;">
-					<span class="">Notifications ({{nc}})</span>
-					<a style="float: right; cursor: pointer;" {% if nc != 0 %} onclick="removeAllNotification(`{% url 'mark_read' %}`, `{{ request.path }}`)"{% endif %} class="text-light">Mark all as read</a>
-				</div>
-			</div>
+		<div class="col-lg-12 col-sm-12 col-12 not-head" style="padding-bottom: 6px;">
+		    <span class="">Notifications ({{nc}})</span>
+		    <a style="float: right; cursor: pointer;" {% if nc != 0 %} onclick="removeAllNotification(`{% url 'mark_read' %}`, `{{ request.path }}`)"{% endif %} class="text-light">Mark all as read</a>
+		</div>
+	    </div>
         </li>
 
         <li class="notification-box" style="width: 100%;">
@@ -36,7 +36,7 @@
                             {% if n.to_worker and n.admin %}
                                 <tr>
                                     <td class="not-text" onclick="window.location=`{% url 'new-worker-notification' n.id %}`;">
-                                        A new user "{{n.to_worker|capfirst}}" has just registered, Please create new tasks quickly.
+                                        A new user "{{n.to_worker|capfirst}}" has just registered, Take note.
                                     </td>
                                     <td style="vertical-align: middle;" class="cancel-btn" onclick="removeNotification(`{% url 'notification-delete' n.id %}`, `{{ request.path }}`)">&#10006;</td>
                                 </tr>
