@@ -271,14 +271,15 @@ def activate_user(request, uidb64, token):
 @login_required(login_url='login')
 def profile(request):
 
-    worker = Worker.objects.get(user=request.user)
+    worker = request.user.worker
 
-    earnings_total = Earnings.objects.get(worker=worker).get_total_earnings
-    pending_earnings = Earnings.objects.get(worker=worker).pending_earnings
-    verified_earnings = Earnings.objects.get(worker=worker).verified_earnings
-    disapproved_earnings = Earnings.objects.get(worker=worker).disapproved_earnings
-    withdrawn_earnings = Earnings.objects.get(worker=worker).withdrawn_earnings
-    paid_earnings = Earnings.objects.get(worker=worker).paid_earnings
+    earnings = Earnings.objects.get(worker=worker)
+    earnings_total = earnings.get_total_earnings
+    pending_earnings = earnings.pending_earnings
+    verified_earnings = earnings.verified_earnings
+    disapproved_earnings = earnings.disapproved_earnings
+    withdrawn_earnings = earnings.withdrawn_earnings
+    paid_earnings = earnings.paid_earnings
 
     task_items = worker.taskitems.all().exclude(ignored=True).values('unique_code')
     tasks = Task.objects.all().exclude(active=False).exclude(unique_code__in=task_items)
