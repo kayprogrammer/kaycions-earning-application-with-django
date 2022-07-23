@@ -6,11 +6,13 @@ This is a simple earning site that rewards users for performing certain tasks.
 
 ### What it contains...
 * General Pages
+
 Users
 * Authentication and Validation
 * Tasks performance system
 * Earnings system
 * Notification system.
+
 Admins
 * Monitoring users and tasks approvals
 * Create Update Read Delete (C.R.U.D) Tasks
